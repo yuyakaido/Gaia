@@ -1,5 +1,7 @@
 package com.yuyakaido.gaia
 
+import android.net.Uri
+import android.webkit.URLUtil
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,17 +22,17 @@ data class ListingDataResponse(
             sealed class Data {
                 @Serializable
                 data class Article(
-                    @SerialName("id") val id: String,
-                    @SerialName("name") val name: String,
-                    @SerialName("subreddit") val community: String,
                     @SerialName("title") val title: String,
-                    @SerialName("thumbnail") val thumbnail: String?,
-                    @SerialName("author") val author: String,
-                    @SerialName("likes") val likes: Boolean?,
-                    @SerialName("ups") val ups: Int,
-                    @SerialName("downs") val downs: Int,
-                    @SerialName("num_comments") val comments: Int
-                ) : Data()
+                    @SerialName("thumbnail") val thumbnail: String?
+                ) : Data() {
+                    fun toThumbnailUri(): Uri {
+                        return if (URLUtil.isNetworkUrl(thumbnail)) {
+                            Uri.parse(thumbnail)
+                        } else {
+                            Uri.EMPTY
+                        }
+                    }
+                }
             }
             @Serializable
             @SerialName(Kind.article)
@@ -39,7 +41,8 @@ data class ListingDataResponse(
             ) : Child() {
                 fun toEntity(): com.yuyakaido.gaia.Article {
                     return Article(
-                        title = data.title
+                        title = data.title,
+                        thumbnail = data.toThumbnailUri()
                     )
                 }
             }
