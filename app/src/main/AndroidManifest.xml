@@ -12,13 +12,26 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".LauncherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".AuthActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.yuyakaido.gaia" android:host="authorization" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MainActivity" />
 
     </application>
 
