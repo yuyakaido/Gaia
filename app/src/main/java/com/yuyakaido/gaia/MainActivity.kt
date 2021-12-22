@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,20 +26,27 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            HelloText()
-        }
         lifecycleScope.launch {
-            val api = Networking.createMeApi(application)
-            val response = api.getMe()
-            Log.d("Gaia", "response = $response")
+            val api = Networking.createArticleApi(application)
+            val articles = api.getPopularArticles().toArticles()
+            setContent {
+                ArticleList(articles)
+            }
         }
     }
 
 }
 
-@Preview(showBackground = true)
 @Composable
-fun HelloText() {
-    Text("Hello!")
+fun ArticleItem(article: Article) {
+    Text(article.title)
+}
+
+@Composable
+fun ArticleList(articles: List<Article>) {
+    LazyColumn {
+        items(articles) {
+            ArticleItem(it)
+        }
+    }
 }

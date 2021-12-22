@@ -19,12 +19,38 @@ object Networking {
 
     private val json = Json {
         ignoreUnknownKeys = true
+        classDiscriminator = Kind.classDiscriminator
     }
     private val converter = json.asConverterFactory("application/json".toMediaType())
     private val httpLoggingInterceptor = HttpLoggingInterceptor()
         .apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
+
+    private fun createRetrofitForPublic(): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(BasicAuthInterceptor())
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://www.reddit.com/api/v1/")
+            .addConverterFactory(converter)
+            .build()
+    }
+
+    private fun createRetrofitForPrivate(application: Application): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .authenticator(TokenAuthenticator(application))
+            .addInterceptor(AuthInterceptor(application))
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://oauth.reddit.com/")
+            .addConverterFactory(converter)
+            .build()
+    }
 
     fun createOAuthUri(): Uri {
         val scopes = listOf(
@@ -72,30 +98,15 @@ object Networking {
     }
 
     fun createAuthApi(): AuthApi {
-        val okHttpClientForPublic = OkHttpClient.Builder()
-            .addInterceptor(BasicAuthInterceptor())
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
-        val retrofitForPublic = Retrofit.Builder()
-            .client(okHttpClientForPublic)
-            .baseUrl("https://www.reddit.com/api/v1/")
-            .addConverterFactory(converter)
-            .build()
-        return retrofitForPublic.create(AuthApi::class.java)
+        return createRetrofitForPublic().create(AuthApi::class.java)
     }
 
     fun createMeApi(application: Application): MeApi {
-        val okHttpClientForPrivate = OkHttpClient.Builder()
-            .authenticator(TokenAuthenticator(application))
-            .addInterceptor(AuthInterceptor(application))
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
-        val retrofitForPrivate = Retrofit.Builder()
-            .client(okHttpClientForPrivate)
-            .baseUrl("https://oauth.reddit.com/api/v1/")
-            .addConverterFactory(converter)
-            .build()
-        return retrofitForPrivate.create(MeApi::class.java)
+        return createRetrofitForPrivate(application).create(MeApi::class.java)
+    }
+
+    fun createArticleApi(application: Application): ArticleApi {
+        return createRetrofitForPrivate(application).create(ArticleApi::class.java)
     }
 
 }
