@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,9 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
@@ -33,14 +35,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val viewModel by viewModels<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            val api = Networking.createArticleApi(application)
-            val articles = api.getPopularArticles().toArticles()
-            setContent {
-                ArticleList(articles)
-            }
+        setContent {
+            MainScreen(
+                context = applicationContext,
+                viewModel = viewModel
+            )
         }
     }
 
@@ -77,20 +80,36 @@ fun ThumbnailImage(uri: Uri) {
 }
 
 @Composable
-fun ArticleItem(article: Article) {
-    Row(modifier = Modifier.padding(vertical = 8.dp)) {
+fun ArticleItem(
+    context: Context,
+    article: Article
+) {
+    Row(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .clickable {
+                Toast
+                    .makeText(context, article.title, Toast.LENGTH_SHORT)
+                    .show()
+            }
+    ) {
         ThumbnailImage(uri = article.thumbnail)
         Spacer(modifier = Modifier.size(16.dp))
         Text(
             text = article.title,
             maxLines = 4,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
+@ExperimentalSerializationApi
 @Composable
-fun ArticleList(articles: List<Article>) {
+fun ArticleList(
+    context: Context,
+    articles: List<Article>
+) {
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
@@ -98,7 +117,42 @@ fun ArticleList(articles: List<Article>) {
         )
     ) {
         items(articles) {
-            ArticleItem(it)
+            ArticleItem(
+                context = context,
+                article = it
+            )
+        }
+    }
+}
+
+@ExperimentalSerializationApi
+@Composable
+fun StateView(state: MainViewModel.State) {
+    Text(
+        text = state::class.java.simpleName,
+        fontSize = 32.sp
+    )
+}
+
+@ExperimentalSerializationApi
+@Composable
+fun MainScreen(
+    context: Context,
+    viewModel: MainViewModel
+) {
+    viewModel.state.value.let {
+        when (it) {
+            is MainViewModel.State.Initial,
+            is MainViewModel.State.Loading,
+            is MainViewModel.State.Error -> {
+                StateView(state = it)
+            }
+            is MainViewModel.State.Ideal -> {
+                ArticleList(
+                    context = context,
+                    articles = it.articles
+                )
+            }
         }
     }
 }
