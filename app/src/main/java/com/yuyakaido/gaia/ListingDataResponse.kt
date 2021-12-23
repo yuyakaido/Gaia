@@ -22,6 +22,7 @@ data class ListingDataResponse(
             sealed class Data {
                 @Serializable
                 data class Article(
+                    @SerialName("id") val id: String,
                     @SerialName("title") val title: String,
                     @SerialName("thumbnail") val thumbnail: String?
                 ) : Data() {
@@ -41,6 +42,7 @@ data class ListingDataResponse(
             ) : Child() {
                 fun toEntity(): com.yuyakaido.gaia.Article {
                     return Article(
+                        id = data.id,
                         title = data.title,
                         thumbnail = data.toThumbnailUri()
                     )
