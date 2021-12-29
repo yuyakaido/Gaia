@@ -12,6 +12,8 @@ import com.yuyakaido.gaia.auth.TokenAuthenticator
 import com.yuyakaido.gaia.domain.Kind
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -19,18 +21,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @ExperimentalSerializationApi
+@InstallIn(SingletonComponent::class)
 @Module
-class AppModule(
-    private val application: Application
-) {
+class AppModule {
 
-    @Provides
-    fun provideApplication(): Application {
-        return application
-    }
-
+    @Singleton
     @Provides
     fun provideConverterFactory(): Converter.Factory {
         val json = Json {
@@ -40,6 +38,7 @@ class AppModule(
         return json.asConverterFactory("application/json".toMediaType())
     }
 
+    @Singleton
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor()
@@ -49,6 +48,7 @@ class AppModule(
     }
 
     @OkHttpClientForPublic
+    @Singleton
     @Provides
     fun provideOkHttpClientForPublic(
         httpLoggingInterceptor: HttpLoggingInterceptor
@@ -61,6 +61,7 @@ class AppModule(
     }
 
     @OkHttpClientForPrivate
+    @Singleton
     @Provides
     fun provideOkHttpClientForPrivate(
         application: Application,
@@ -81,6 +82,7 @@ class AppModule(
     }
 
     @RetrofitForPublic
+    @Singleton
     @Provides
     fun provideRetrofitForPublic(
         @OkHttpClientForPublic okHttpClient: OkHttpClient,
@@ -94,6 +96,7 @@ class AppModule(
     }
 
     @RetrofitForPrivate
+    @Singleton
     @Provides
     fun provideRetrofitForPrivate(
         @OkHttpClientForPrivate okHttpClient: OkHttpClient,
@@ -106,6 +109,7 @@ class AppModule(
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideAuthApi(
         @RetrofitForPublic retrofit: Retrofit
@@ -113,6 +117,7 @@ class AppModule(
         return retrofit.create(AuthApi::class.java)
     }
 
+    @Singleton
     @Provides
     fun provideAccountApi(
         @RetrofitForPrivate retrofit: Retrofit
@@ -120,6 +125,7 @@ class AppModule(
         return retrofit.create(AccountApi::class.java)
     }
 
+    @Singleton
     @Provides
     fun provideArticleApi(
         @RetrofitForPrivate retrofit: Retrofit

@@ -1,22 +1,15 @@
 package com.yuyakaido.gaia.app
 
+import android.app.Application
 import com.facebook.stetho.Stetho
 import com.yuyakaido.gaia.BuildConfig
-import com.yuyakaido.gaia.di.AppModule
-import com.yuyakaido.gaia.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.serialization.ExperimentalSerializationApi
 import timber.log.Timber
 
 @ExperimentalSerializationApi
-class GaiaApp : DaggerApplication() {
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
-    }
+@HiltAndroidApp
+class GaiaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

@@ -1,12 +1,12 @@
 package com.yuyakaido.gaia.article
 
-import com.yuyakaido.gaia.di.AppScope
 import com.yuyakaido.gaia.domain.Article
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @ExperimentalSerializationApi
-@AppScope
+@Singleton
 class ArticleRepository @Inject constructor(
     private val api: ArticleApi
 ) {
