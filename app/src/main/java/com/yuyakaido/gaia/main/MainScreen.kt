@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yuyakaido.gaia.account.AccountScreen
+import com.yuyakaido.gaia.account.AccountViewModel
 import com.yuyakaido.gaia.app.Destination
 import com.yuyakaido.gaia.article.ArticleDetailScreen
 import com.yuyakaido.gaia.article.ArticleDetailViewModel
@@ -25,7 +26,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 @Composable
 fun MainScreen(
     articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>,
-    articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>
+    articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>,
+    accountViewModelFactory: ViewModelFactory<AccountViewModel>
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -55,7 +57,11 @@ fun MainScreen(
                 ArticleDetailScreen(viewModel = viewModel)
             }
             composable(route = Destination.Account.route) {
-                AccountScreen()
+                val viewModel = viewModel(
+                    modelClass = AccountViewModel::class.java,
+                    factory = accountViewModelFactory
+                )
+                AccountScreen(viewModel = viewModel)
             }
         }
     }

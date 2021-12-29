@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.yuyakaido.gaia.app.Destination
@@ -33,7 +32,7 @@ fun ArticleListScreen(
             is ArticleListViewModel.State.Initial,
             is ArticleListViewModel.State.Loading,
             is ArticleListViewModel.State.Error -> {
-                StateView(state = it::class.java.simpleName)
+                Text(text = it::class.java.simpleName)
             }
             is ArticleListViewModel.State.Ideal -> {
                 ArticleList(
@@ -119,13 +118,4 @@ fun ThumbnailImage(uri: Uri) {
             contentScale = ContentScale.Crop
         )
     }
-}
-
-@ExperimentalSerializationApi
-@Composable
-fun StateView(state: String) {
-    Text(
-        text = state,
-        fontSize = 32.sp
-    )
 }

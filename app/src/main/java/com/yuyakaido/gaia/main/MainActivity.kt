@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import com.yuyakaido.gaia.account.AccountViewModel
 import com.yuyakaido.gaia.article.ArticleDetailViewModel
 import com.yuyakaido.gaia.article.ArticleListViewModel
 import com.yuyakaido.gaia.core.ViewModelFactory
@@ -26,12 +27,16 @@ class MainActivity : DaggerAppCompatActivity() {
     @Inject
     internal lateinit var articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>
 
+    @Inject
+    internal lateinit var accountViewModelFactory: ViewModelFactory<AccountViewModel>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MainScreen(
                 articleListViewModelFactory = articleListViewModelFactory,
-                articleDetailViewModelFactory = articleDetailViewModelFactory
+                articleDetailViewModelFactory = articleDetailViewModelFactory,
+                accountViewModelFactory = accountViewModelFactory
             )
         }
     }

@@ -3,6 +3,7 @@ package com.yuyakaido.gaia.di
 import android.app.Application
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.yuyakaido.gaia.account.AccountApi
 import com.yuyakaido.gaia.article.ArticleApi
 import com.yuyakaido.gaia.auth.AuthApi
 import com.yuyakaido.gaia.auth.AuthInterceptor
@@ -110,6 +111,13 @@ class AppModule(
         @RetrofitForPublic retrofit: Retrofit
     ): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    fun provideAccountApi(
+        @RetrofitForPrivate retrofit: Retrofit
+    ): AccountApi {
+        return retrofit.create(AccountApi::class.java)
     }
 
     @Provides
