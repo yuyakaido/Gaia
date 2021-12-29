@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.app
+package com.yuyakaido.gaia.main
 
 import android.content.Context
 import android.content.Intent
@@ -12,11 +12,11 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @ExperimentalSerializationApi
-class HomeActivity : DaggerAppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     companion object {
         fun createIntent(context: Context): Intent {
-            return Intent(context, HomeActivity::class.java)
+            return Intent(context, MainActivity::class.java)
         }
     }
 
@@ -29,7 +29,7 @@ class HomeActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            HomeScreen(
+            MainScreen(
                 articleListViewModelFactory = articleListViewModelFactory,
                 articleDetailViewModelFactory = articleDetailViewModelFactory
             )

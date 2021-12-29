@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".app.HomeActivity" />
+        <activity android:name=".main.MainActivity" />
 
     </application>
 

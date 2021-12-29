@@ -1,8 +1,8 @@
 package com.yuyakaido.gaia.di
 
-import com.yuyakaido.gaia.app.HomeActivity
 import com.yuyakaido.gaia.app.LauncherActivity
 import com.yuyakaido.gaia.auth.AuthActivity
+import com.yuyakaido.gaia.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -18,6 +18,6 @@ abstract class ActivityModule {
     abstract fun contributeAuthActivity(): AuthActivity
 
     @ContributesAndroidInjector
-    abstract fun contributeMainActivity(): HomeActivity
+    abstract fun contributeMainActivity(): MainActivity
 
 }

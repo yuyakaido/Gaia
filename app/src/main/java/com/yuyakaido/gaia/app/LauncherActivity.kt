@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.yuyakaido.gaia.auth.AuthApi
 import com.yuyakaido.gaia.auth.OAuth
 import com.yuyakaido.gaia.auth.Session
+import com.yuyakaido.gaia.main.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class LauncherActivity : DaggerAppCompatActivity() {
         if (session == null) {
             startActivity(Intent(Intent.ACTION_VIEW, OAuth.uri))
         } else {
-            startActivity(HomeActivity.createIntent(this))
+            startActivity(MainActivity.createIntent(this))
         }
         finish()
     }
