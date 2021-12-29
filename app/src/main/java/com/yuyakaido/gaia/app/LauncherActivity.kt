@@ -2,18 +2,16 @@ package com.yuyakaido.gaia.app
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.yuyakaido.gaia.auth.AuthApi
 import com.yuyakaido.gaia.auth.OAuth
 import com.yuyakaido.gaia.auth.Session
 import com.yuyakaido.gaia.main.MainActivity
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @ExperimentalSerializationApi
-@AndroidEntryPoint
-class LauncherActivity : AppCompatActivity() {
+class LauncherActivity : DaggerAppCompatActivity() {
 
     @Inject
     internal lateinit var authApi: AuthApi

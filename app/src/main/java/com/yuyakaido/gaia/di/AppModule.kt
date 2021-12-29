@@ -12,6 +12,7 @@ import com.yuyakaido.gaia.auth.TokenAuthenticator
 import com.yuyakaido.gaia.domain.Kind
 import dagger.Module
 import dagger.Provides
+import dagger.android.support.AndroidSupportInjectionModule
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -25,7 +26,12 @@ import javax.inject.Singleton
 
 @ExperimentalSerializationApi
 @InstallIn(SingletonComponent::class)
-@Module
+@Module(
+    includes = [
+        AndroidSupportInjectionModule::class,
+        ActivityModule::class
+    ]
+)
 class AppModule {
 
     @Singleton
