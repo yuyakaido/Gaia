@@ -87,7 +87,16 @@ fun MainNavigation(
                 },
                 selected = currentRoute == tab.route,
                 onClick = {
-                    navController.navigate(tab.route)
+                    if (tab.route != currentRoute) {
+                        navController.navigate(tab.route) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {
+                                    saveState = true
+                                }
+                            }
+                            restoreState = true
+                        }
+                    }
                 }
             )
         }
