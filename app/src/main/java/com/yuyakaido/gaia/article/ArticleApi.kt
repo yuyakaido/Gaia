@@ -1,5 +1,6 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.article
 
+import com.yuyakaido.gaia.core.ListingDataResponse
 import retrofit2.http.GET
 
 interface ArticleApi {

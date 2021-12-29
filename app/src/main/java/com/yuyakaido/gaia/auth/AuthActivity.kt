@@ -2,7 +2,7 @@ package com.yuyakaido.gaia.auth
 
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.yuyakaido.gaia.MainActivity
+import com.yuyakaido.gaia.app.HomeActivity
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -24,7 +24,7 @@ class AuthActivity : DaggerAppCompatActivity() {
                 val session = response.toSession()
                 Session.put(application, session)
 
-                startActivity(MainActivity.createIntent(this@AuthActivity))
+                startActivity(HomeActivity.createIntent(this@AuthActivity))
                 finish()
             }
         }

@@ -1,8 +1,9 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.article
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.sp
+import com.yuyakaido.gaia.domain.Article
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi

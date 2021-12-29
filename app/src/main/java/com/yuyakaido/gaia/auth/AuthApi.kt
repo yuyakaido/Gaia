@@ -1,6 +1,5 @@
 package com.yuyakaido.gaia.auth
 
-import com.yuyakaido.gaia.auth.AccessTokenResponse
 import retrofit2.http.POST
 import retrofit2.http.Query
 

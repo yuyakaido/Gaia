@@ -1,12 +1,14 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.di
 
 import android.app.Application
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.yuyakaido.gaia.article.ArticleApi
 import com.yuyakaido.gaia.auth.AuthApi
 import com.yuyakaido.gaia.auth.AuthInterceptor
 import com.yuyakaido.gaia.auth.BasicAuthInterceptor
 import com.yuyakaido.gaia.auth.TokenAuthenticator
+import com.yuyakaido.gaia.domain.Kind
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -61,10 +63,16 @@ class AppModule(
     @Provides
     fun provideOkHttpClientForPrivate(
         application: Application,
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        authApi: AuthApi
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .authenticator(TokenAuthenticator(application))
+            .authenticator(
+                TokenAuthenticator(
+                    application = application,
+                    authApi = authApi
+                )
+            )
             .addInterceptor(StethoInterceptor())
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(AuthInterceptor(application))

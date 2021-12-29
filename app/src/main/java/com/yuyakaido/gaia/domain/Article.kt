@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.domain
 
 import android.net.Uri
 

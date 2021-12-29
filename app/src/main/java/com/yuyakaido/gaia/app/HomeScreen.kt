@@ -1,29 +1,34 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.app
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.yuyakaido.gaia.article.ArticleDetailScreen
+import com.yuyakaido.gaia.article.ArticleDetailViewModel
+import com.yuyakaido.gaia.article.ArticleListScreen
+import com.yuyakaido.gaia.article.ArticleListViewModel
+import com.yuyakaido.gaia.core.ViewModelFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
 @Composable
-fun GaiaAppScreen(
-    mainViewModelFactory: ViewModelFactory<MainViewModel>,
+fun HomeScreen(
+    articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>,
     articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>
 ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.Main.route
+        startDestination = Screen.ArticleList.route
     ) {
-        composable(route = Screen.Main.route) {
-            MainScreen(
+        composable(route = Screen.ArticleList.route) {
+            ArticleListScreen(
                 navController = navController,
                 viewModel = viewModel(
-                    modelClass = MainViewModel::class.java,
-                    factory = mainViewModelFactory
+                    modelClass = ArticleListViewModel::class.java,
+                    factory = articleListViewModelFactory
                 )
             )
         }

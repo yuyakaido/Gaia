@@ -1,5 +1,7 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.article
 
+import com.yuyakaido.gaia.di.AppScope
+import com.yuyakaido.gaia.domain.Article
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
@@ -19,7 +21,7 @@ class ArticleRepository @Inject constructor(
         return articles
     }
 
-    suspend fun getArticle(id: String): Article {
+    fun getArticle(id: String): Article {
         return cache.first { it.id == id }
     }
 

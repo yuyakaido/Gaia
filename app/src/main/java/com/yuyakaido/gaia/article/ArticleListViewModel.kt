@@ -1,14 +1,15 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.article
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yuyakaido.gaia.domain.Article
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @ExperimentalSerializationApi
-class MainViewModel @Inject constructor(
+class ArticleListViewModel @Inject constructor(
     private val repository: ArticleRepository
 ) : ViewModel() {
 

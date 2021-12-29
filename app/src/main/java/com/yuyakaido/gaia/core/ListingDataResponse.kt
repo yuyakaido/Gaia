@@ -1,7 +1,9 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.core
 
 import android.net.Uri
 import android.webkit.URLUtil
+import com.yuyakaido.gaia.domain.Article
+import com.yuyakaido.gaia.domain.Kind
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -40,7 +42,7 @@ data class ListingDataResponse(
             data class Article(
                 @SerialName("data") override val data: Data.Article
             ) : Child() {
-                fun toEntity(): com.yuyakaido.gaia.Article {
+                fun toEntity(): com.yuyakaido.gaia.domain.Article {
                     return Article(
                         id = data.id,
                         title = data.title,

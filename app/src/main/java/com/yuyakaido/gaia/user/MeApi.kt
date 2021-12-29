@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.user
 
 import kotlinx.serialization.json.JsonElement
 import retrofit2.http.GET

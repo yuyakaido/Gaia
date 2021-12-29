@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.domain
 
 enum class Kind(val id: String) {
     Comment(id = Kind.comment),

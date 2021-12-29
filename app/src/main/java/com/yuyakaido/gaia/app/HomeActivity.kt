@@ -1,24 +1,27 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.app
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import com.yuyakaido.gaia.article.ArticleDetailViewModel
+import com.yuyakaido.gaia.article.ArticleListViewModel
+import com.yuyakaido.gaia.core.ViewModelFactory
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @ExperimentalSerializationApi
-class MainActivity : DaggerAppCompatActivity() {
+class HomeActivity : DaggerAppCompatActivity() {
 
     companion object {
         fun createIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
+            return Intent(context, HomeActivity::class.java)
         }
     }
 
     @Inject
-    internal lateinit var mainViewModelFactory: ViewModelFactory<MainViewModel>
+    internal lateinit var articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>
 
     @Inject
     internal lateinit var articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>
@@ -26,8 +29,8 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GaiaAppScreen(
-                mainViewModelFactory = mainViewModelFactory,
+            HomeScreen(
+                articleListViewModelFactory = articleListViewModelFactory,
                 articleDetailViewModelFactory = articleDetailViewModelFactory
             )
         }

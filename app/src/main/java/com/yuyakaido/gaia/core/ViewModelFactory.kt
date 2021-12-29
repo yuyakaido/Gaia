@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

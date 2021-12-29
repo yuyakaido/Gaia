@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia
+package com.yuyakaido.gaia.article
 
 import android.net.Uri
 import androidx.compose.foundation.Canvas
@@ -18,22 +18,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.yuyakaido.gaia.app.Screen
+import com.yuyakaido.gaia.domain.Article
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
 @Composable
-fun MainScreen(
+fun ArticleListScreen(
     navController: NavController,
-    viewModel: MainViewModel
+    viewModel: ArticleListViewModel
 ) {
     viewModel.state.value.let {
         when (it) {
-            is MainViewModel.State.Initial,
-            is MainViewModel.State.Loading,
-            is MainViewModel.State.Error -> {
+            is ArticleListViewModel.State.Initial,
+            is ArticleListViewModel.State.Loading,
+            is ArticleListViewModel.State.Error -> {
                 StateView(state = it::class.java.simpleName)
             }
-            is MainViewModel.State.Ideal -> {
+            is ArticleListViewModel.State.Ideal -> {
                 ArticleList(
                     navController = navController,
                     articles = it.articles
