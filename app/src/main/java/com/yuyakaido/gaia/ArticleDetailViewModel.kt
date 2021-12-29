@@ -8,28 +8,21 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
-class MainViewModel(
+class ArticleDetailViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
     sealed class State {
         object Initial : State()
-        object Loading : State()
-        object Error : State()
-        data class Ideal(val articles: List<Article>) : State()
+        data class Ideal(val article: Article) : State()
     }
 
     val state = mutableStateOf<State>(State.Initial)
 
-    init {
+    fun onCreate(id: String) {
         viewModelScope.launch {
-            state.value = State.Loading
-            try {
-                val articles = ArticleRepository.getPopularArticles(application)
-                state.value = State.Ideal(articles)
-            } catch (e: Exception) {
-                state.value = State.Error
-            }
+            val article = ArticleRepository.getArticle(id = id)
+            state.value = State.Ideal(article = article)
         }
     }
 

@@ -31,7 +31,7 @@ fun MainScreen(
             is MainViewModel.State.Initial,
             is MainViewModel.State.Loading,
             is MainViewModel.State.Error -> {
-                StateView(state = it)
+                StateView(state = it::class.java.simpleName)
             }
             is MainViewModel.State.Ideal -> {
                 ArticleList(
@@ -121,9 +121,9 @@ fun ThumbnailImage(uri: Uri) {
 
 @ExperimentalSerializationApi
 @Composable
-fun StateView(state: MainViewModel.State) {
+fun StateView(state: String) {
     Text(
-        text = state::class.java.simpleName,
+        text = state,
         fontSize = 32.sp
     )
 }

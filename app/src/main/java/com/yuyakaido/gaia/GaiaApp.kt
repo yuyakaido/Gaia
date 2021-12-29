@@ -24,7 +24,9 @@ fun GaiaApp() {
         composable(route = Screen.ArticleDetail.route) {
             val arguments = requireNotNull(it.arguments)
             val id = requireNotNull(arguments.getString("id"))
-            ArticleDetailScreen(id = id)
+            val viewModel = viewModel(ArticleDetailViewModel::class.java)
+            viewModel.onCreate(id = id)
+            ArticleDetailScreen(viewModel = viewModel)
         }
     }
 }
