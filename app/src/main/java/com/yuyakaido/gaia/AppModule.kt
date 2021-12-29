@@ -1,6 +1,7 @@
 package com.yuyakaido.gaia
 
 import android.app.Application
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yuyakaido.gaia.auth.AuthApi
 import com.yuyakaido.gaia.auth.AuthInterceptor
@@ -50,8 +51,9 @@ class AppModule(
         httpLoggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(BasicAuthInterceptor())
+            .addInterceptor(StethoInterceptor())
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(BasicAuthInterceptor())
             .build()
     }
 
@@ -63,8 +65,9 @@ class AppModule(
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .authenticator(TokenAuthenticator(application))
-            .addInterceptor(AuthInterceptor(application))
+            .addInterceptor(StethoInterceptor())
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(AuthInterceptor(application))
             .build()
     }
 
