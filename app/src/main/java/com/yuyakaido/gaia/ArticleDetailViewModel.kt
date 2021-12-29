@@ -1,16 +1,16 @@
 package com.yuyakaido.gaia
 
-import android.app.Application
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
-class ArticleDetailViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+class ArticleDetailViewModel @Inject constructor(
+    private val repository: ArticleRepository
+) : ViewModel() {
 
     sealed class State {
         object Initial : State()
@@ -21,7 +21,7 @@ class ArticleDetailViewModel(
 
     fun onCreate(id: String) {
         viewModelScope.launch {
-            val article = ArticleRepository.getArticle(id = id)
+            val article = repository.getArticle(id = id)
             state.value = State.Ideal(article = article)
         }
     }

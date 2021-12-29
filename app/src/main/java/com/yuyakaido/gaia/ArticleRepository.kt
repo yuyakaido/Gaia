@@ -1,16 +1,18 @@
 package com.yuyakaido.gaia
 
-import android.app.Application
 import kotlinx.serialization.ExperimentalSerializationApi
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
-object ArticleRepository {
+@AppScope
+class ArticleRepository @Inject constructor(
+    private val api: ArticleApi
+) {
 
     private val cache = mutableSetOf<Article>()
 
-    suspend fun getPopularArticles(application: Application): List<Article> {
-        val articles = Networking
-            .createArticleApi(application)
+    suspend fun getPopularArticles(): List<Article> {
+        val articles = api
             .getPopularArticles()
             .toArticles()
         cache.addAll(articles)

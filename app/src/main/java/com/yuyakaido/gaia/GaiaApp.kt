@@ -1,9 +1,18 @@
 package com.yuyakaido.gaia
 
-import android.app.Application
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
+import kotlinx.serialization.ExperimentalSerializationApi
 import timber.log.Timber
 
-class GaiaApp : Application() {
+@ExperimentalSerializationApi
+class GaiaApp : DaggerApplication() {
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
+    }
 
     override fun onCreate() {
         super.onCreate()

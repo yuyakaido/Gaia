@@ -9,7 +9,10 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
 @Composable
-fun GaiaAppScreen() {
+fun GaiaAppScreen(
+    mainViewModelFactory: ViewModelFactory<MainViewModel>,
+    articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -18,13 +21,19 @@ fun GaiaAppScreen() {
         composable(route = Screen.Main.route) {
             MainScreen(
                 navController = navController,
-                viewModel = viewModel()
+                viewModel = viewModel(
+                    modelClass = MainViewModel::class.java,
+                    factory = mainViewModelFactory
+                )
             )
         }
         composable(route = Screen.ArticleDetail.route) {
             val arguments = requireNotNull(it.arguments)
             val id = requireNotNull(arguments.getString("id"))
-            val viewModel = viewModel(ArticleDetailViewModel::class.java)
+            val viewModel = viewModel(
+                modelClass = ArticleDetailViewModel::class.java,
+                factory = articleDetailViewModelFactory
+            )
             viewModel.onCreate(id = id)
             ArticleDetailScreen(viewModel = viewModel)
         }
