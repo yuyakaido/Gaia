@@ -10,7 +10,7 @@ android {
     compileSdk 31
     defaultConfig {
         applicationId 'com.yuyakaido.gaia'
-        minSdk 21
+        minSdk 24
         targetSdk 31
         versionCode 1
         versionName '0.0.0'
