@@ -13,11 +13,17 @@ class TokenAuthenticator(
 
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
-            val oldSession = Session.get(application)
-            oldSession?.refreshToken?.let {
-                val result = authApi.refreshAccessToken(refreshToken = it)
-                val newSession = result.toSession()
-                Session.put(application, newSession)
+            val oldSession = Session.get(application = application)
+            oldSession?.token?.refreshToken?.let {
+                val token = authApi.refreshAccessToken(refreshToken = it).toToken()
+                val newSession = Session(
+                    id = oldSession.id,
+                    token = token
+                )
+                Session.put(
+                    application = application,
+                    session = newSession
+                )
                 return@runBlocking response
                     .request
                     .newBuilder()

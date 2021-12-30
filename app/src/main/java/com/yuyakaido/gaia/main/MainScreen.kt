@@ -3,6 +3,8 @@ package com.yuyakaido.gaia.main
 import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -27,6 +29,7 @@ import com.yuyakaido.gaia.article.ArticleDetailScreen
 import com.yuyakaido.gaia.article.ArticleDetailViewModel
 import com.yuyakaido.gaia.article.ArticleListScreen
 import com.yuyakaido.gaia.article.ArticleListViewModel
+import com.yuyakaido.gaia.auth.Session
 import com.yuyakaido.gaia.core.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -35,6 +38,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 @Composable
 fun MainScreen(
     application: Application,
+    mainViewModelFactory: ViewModelFactory<MainViewModel>,
     articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>,
     articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>,
     accountViewModelFactory: ViewModelFactory<AccountViewModel>
@@ -54,11 +58,17 @@ fun MainScreen(
         }
     }
 
+    val mainViewModel = viewModel(
+        modelClass = MainViewModel::class.java,
+        factory = mainViewModelFactory
+    )
+    val sessions = mainViewModel.sessions.value
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { MainTopBar(application = application) { openDrawer.invoke() } },
         bottomBar = { MainBottomBar(navController = navController) },
-        drawerContent = { MainDrawer { closeDrawer.invoke() } }
+        drawerContent = { MainDrawer(sessions = sessions) { closeDrawer.invoke() } }
     ) {
         NavHost(
             navController = navController,
@@ -150,10 +160,11 @@ fun MainBottomBar(
 
 @Composable
 fun MainDrawer(
+    sessions: List<Session>,
     closeDrawer: () -> Unit
 ) {
-    Column {
-        MainDrawerItem.values().forEach {
+    LazyColumn {
+        items(sessions) {
             Row(
                 modifier = Modifier
                     .height(50.dp)
@@ -164,7 +175,7 @@ fun MainDrawer(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = it.name,
+                    text = it.id,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )

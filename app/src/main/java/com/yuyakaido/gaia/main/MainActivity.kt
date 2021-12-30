@@ -24,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Inject
+    internal lateinit var mainViewModelFactory: ViewModelFactory<MainViewModel>
+
+    @Inject
     internal lateinit var articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>
 
     @Inject
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MainScreen(
                 application = application,
+                mainViewModelFactory = mainViewModelFactory,
                 articleListViewModelFactory = articleListViewModelFactory,
                 articleDetailViewModelFactory = articleDetailViewModelFactory,
                 accountViewModelFactory = accountViewModelFactory
