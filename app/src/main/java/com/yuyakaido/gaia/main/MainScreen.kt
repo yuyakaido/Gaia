@@ -31,6 +31,8 @@ import com.yuyakaido.gaia.article.ArticleListScreen
 import com.yuyakaido.gaia.article.ArticleListViewModel
 import com.yuyakaido.gaia.auth.Session
 import com.yuyakaido.gaia.core.ViewModelFactory
+import com.yuyakaido.gaia.message.MessageListScreen
+import com.yuyakaido.gaia.message.MessageListViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
@@ -43,6 +45,7 @@ fun MainScreen(
     mainViewModelFactory: ViewModelFactory<MainViewModel>,
     articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>,
     articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>,
+    messageListViewModelFactory: ViewModelFactory<MessageListViewModel>,
     accountViewModelFactory: ViewModelFactory<AccountViewModel>
 ) {
     val navController = rememberNavController()
@@ -101,6 +104,13 @@ fun MainScreen(
                 )
                 viewModel.onCreate(id = id)
                 ArticleDetailScreen(viewModel = viewModel)
+            }
+            composable(route = Screen.MessageList.route) {
+                val viewModel = viewModel(
+                    modelClass = MessageListViewModel::class.java,
+                    factory = messageListViewModelFactory
+                )
+                MessageListScreen(viewModel = viewModel)
             }
             composable(route = Screen.Account.route) {
                 val viewModel = viewModel(

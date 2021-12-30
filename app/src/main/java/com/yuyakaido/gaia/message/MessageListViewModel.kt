@@ -1,24 +1,22 @@
-package com.yuyakaido.gaia.article
+package com.yuyakaido.gaia.message
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yuyakaido.gaia.domain.Article
+import com.yuyakaido.gaia.domain.Message
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import timber.log.Timber
 import javax.inject.Inject
 
-@ExperimentalSerializationApi
-class ArticleListViewModel @Inject constructor(
-    private val repository: ArticleRepository
+class MessageListViewModel @Inject constructor(
+    repository: MessageRepository
 ) : ViewModel() {
 
     sealed class State {
         object Initial : State()
         object Loading : State()
         object Error : State()
-        data class Ideal(val articles: List<Article>) : State()
+        data class Ideal(val messages: List<Message>) : State()
     }
 
     val state = mutableStateOf<State>(State.Initial)
@@ -27,8 +25,8 @@ class ArticleListViewModel @Inject constructor(
         viewModelScope.launch {
             state.value = State.Loading
             try {
-                val articles = repository.getPopularArticles()
-                state.value = State.Ideal(articles)
+                val messages = repository.getMessages()
+                state.value = State.Ideal(messages = messages)
             } catch (e: Exception) {
                 state.value = State.Error
                 Timber.e(e)

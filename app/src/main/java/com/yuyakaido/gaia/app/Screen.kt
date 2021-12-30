@@ -7,5 +7,6 @@ sealed class Screen(val route: String) {
             return "articles/$id"
         }
     }
+    object MessageList : Screen("messages")
     object Account : Screen("account")
 }

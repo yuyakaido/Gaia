@@ -12,6 +12,7 @@ import com.yuyakaido.gaia.article.ArticleListViewModel
 import com.yuyakaido.gaia.auth.OAuth
 import com.yuyakaido.gaia.auth.Session
 import com.yuyakaido.gaia.core.ViewModelFactory
+import com.yuyakaido.gaia.message.MessageListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
@@ -36,6 +37,9 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>
 
     @Inject
+    internal lateinit var messageListViewModelFactory: ViewModelFactory<MessageListViewModel>
+
+    @Inject
     internal lateinit var accountViewModelFactory: ViewModelFactory<AccountViewModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 mainViewModelFactory = mainViewModelFactory,
                 articleListViewModelFactory = articleListViewModelFactory,
                 articleDetailViewModelFactory = articleDetailViewModelFactory,
+                messageListViewModelFactory = messageListViewModelFactory,
                 accountViewModelFactory = accountViewModelFactory
             )
         }

@@ -10,6 +10,7 @@ import com.yuyakaido.gaia.auth.AuthInterceptor
 import com.yuyakaido.gaia.auth.BasicAuthInterceptor
 import com.yuyakaido.gaia.auth.TokenAuthenticator
 import com.yuyakaido.gaia.domain.Kind
+import com.yuyakaido.gaia.message.MessageApi
 import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule
@@ -36,11 +37,18 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideConverterFactory(): Converter.Factory {
-        val json = Json {
+    fun provideJson(): Json {
+        return Json {
             ignoreUnknownKeys = true
             classDiscriminator = Kind.classDiscriminator
         }
+    }
+
+    @Singleton
+    @Provides
+    fun provideConverterFactory(
+        json: Json
+    ): Converter.Factory {
         return json.asConverterFactory("application/json".toMediaType())
     }
 
@@ -137,6 +145,14 @@ class AppModule {
         @RetrofitForPrivate retrofit: Retrofit
     ): ArticleApi {
         return retrofit.create(ArticleApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMessageApi(
+        @RetrofitForPrivate retrofit: Retrofit
+    ): MessageApi {
+        return retrofit.create(MessageApi::class.java)
     }
 
 }
