@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MainScreen(
+                application = application,
                 articleListViewModelFactory = articleListViewModelFactory,
                 articleDetailViewModelFactory = articleDetailViewModelFactory,
                 accountViewModelFactory = accountViewModelFactory

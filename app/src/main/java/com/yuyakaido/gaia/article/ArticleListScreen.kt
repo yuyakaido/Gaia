@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.yuyakaido.gaia.app.Destination
+import com.yuyakaido.gaia.app.Screen
 import com.yuyakaido.gaia.domain.Article
 import kotlinx.serialization.ExperimentalSerializationApi
 
@@ -75,7 +75,7 @@ fun ArticleItem(
             .padding(vertical = 8.dp)
             .clickable {
                 navController.navigate(
-                    route = Destination.ArticleDetail.createRoute(article.id)
+                    route = Screen.ArticleDetail.createRoute(article.id)
                 )
             }
     ) {
