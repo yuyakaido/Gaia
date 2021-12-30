@@ -38,6 +38,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 @Composable
 fun MainScreen(
     application: Application,
+    addNewAccount: () -> Unit,
+    activateSession: (session: Session) -> Unit,
     mainViewModelFactory: ViewModelFactory<MainViewModel>,
     articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>,
     articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>,
@@ -47,12 +49,12 @@ fun MainScreen(
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    val openDrawer = {
+    val openDrawer: () -> Unit = {
         coroutineScope.launch {
             scaffoldState.drawerState.open()
         }
     }
-    val closeDrawer = {
+    val closeDrawer: () -> Unit = {
         coroutineScope.launch {
             scaffoldState.drawerState.close()
         }
@@ -68,7 +70,14 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         topBar = { MainTopBar(application = application) { openDrawer.invoke() } },
         bottomBar = { MainBottomBar(navController = navController) },
-        drawerContent = { MainDrawer(sessions = sessions) { closeDrawer.invoke() } }
+        drawerContent = {
+            MainDrawer(
+                sessions = sessions,
+                addNewAccount = addNewAccount,
+                activateSession = activateSession,
+                closeDrawer = closeDrawer
+            )
+        }
     ) {
         NavHost(
             navController = navController,
@@ -161,24 +170,40 @@ fun MainBottomBar(
 @Composable
 fun MainDrawer(
     sessions: List<Session>,
-    closeDrawer: () -> Unit
+    addNewAccount: () -> Unit,
+    activateSession: (session: Session) -> Unit,
+    closeDrawer: () -> Unit,
 ) {
-    LazyColumn {
-        items(sessions) {
-            Row(
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxSize()
-                    .clickable {
-                        closeDrawer.invoke()
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = it.id,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+    val height = 50.dp
+    Column {
+        LazyColumn {
+            items(sessions) {
+                Row(
+                    modifier = Modifier
+                        .height(height = height)
+                        .fillMaxSize()
+                        .clickable {
+                            activateSession.invoke(it)
+                            closeDrawer.invoke()
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = it.name,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
+            }
+        }
+        Box(
+            modifier = Modifier
+                .height(height = height)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            TextButton(onClick = { addNewAccount.invoke() }) {
+                Text(text = "Add new account")
             }
         }
     }

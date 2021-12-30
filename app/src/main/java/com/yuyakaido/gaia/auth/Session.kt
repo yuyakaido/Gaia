@@ -11,6 +11,7 @@ import kotlinx.serialization.json.*
 @Serializable
 data class Session(
     @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
     @SerialName("token") val token: Token
 ) {
     val bearerToken get() = "bearer ${token.accessToken}"
@@ -18,6 +19,7 @@ data class Session(
     companion object {
         private const val SESSIONS = "sessions"
         private const val ACTIVE_SESSIONS = "active_sessions"
+        private const val ACTIVE_SESSION_INDEX = "active_session_index"
 
         fun all(application: Application): List<Session> {
             val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
@@ -31,7 +33,9 @@ data class Session(
         }
 
         fun get(application: Application): Session? {
-            return all(application).firstOrNull()
+            val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
+            val activeSessionIndex = preference.getInt(ACTIVE_SESSION_INDEX, 0)
+            return all(application).getOrNull(activeSessionIndex)
         }
 
         fun put(application: Application, session: Session) {
@@ -47,7 +51,8 @@ data class Session(
                 }
             } else {
                 currentActiveSessions.plus(session)
-            }
+            }.distinctBy { it.name }
+            val newActiveSessionIndex = newActiveSessions.indexOfFirst { it.name == session.name }
 
             val json = buildJsonArray {
                 newActiveSessions.forEach {
@@ -58,6 +63,17 @@ data class Session(
             val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
             preference.edit(commit = false) {
                 putString(ACTIVE_SESSIONS, json)
+                putInt(ACTIVE_SESSION_INDEX, newActiveSessionIndex)
+            }
+        }
+
+        fun activate(application: Application, session: Session) {
+            val sessions = all(application = application)
+            val activeSessionIndex = sessions.indexOf(session)
+
+            val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
+            preference.edit(commit = false) {
+                putInt(ACTIVE_SESSION_INDEX, activeSessionIndex)
             }
         }
     }

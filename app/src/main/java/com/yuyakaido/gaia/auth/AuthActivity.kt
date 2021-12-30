@@ -28,12 +28,22 @@ class AuthActivity : AppCompatActivity() {
                 val code = uri.getQueryParameter("code") ?: ""
 
                 val token = authApi.getAccessToken(code = code).toToken()
+                val id = UUID.randomUUID().toString()
+                var session = Session(
+                    id = id,
+                    name = "",
+                    token = token
+                )
                 Session.put(
                     application = application,
-                    session = Session(
-                        id = UUID.randomUUID().toString(),
-                        token = token
-                    )
+                    session = session
+                )
+
+                val account = accountApi.getMe().toEntity()
+                session = session.copy(name = account.name)
+                Session.put(
+                    application = application,
+                    session = session
                 )
 
                 startActivity(MainActivity.createIntent(this@AuthActivity))

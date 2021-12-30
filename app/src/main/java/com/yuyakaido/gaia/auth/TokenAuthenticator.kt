@@ -15,11 +15,8 @@ class TokenAuthenticator(
         return runBlocking {
             val oldSession = Session.get(application = application)
             oldSession?.token?.refreshToken?.let {
-                val token = authApi.refreshAccessToken(refreshToken = it).toToken()
-                val newSession = Session(
-                    id = oldSession.id,
-                    token = token
-                )
+                val newToken = authApi.refreshAccessToken(refreshToken = it).toToken()
+                val newSession = oldSession.copy(token = newToken)
                 Session.put(
                     application = application,
                     session = newSession

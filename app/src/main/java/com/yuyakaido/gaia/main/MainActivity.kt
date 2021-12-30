@@ -6,8 +6,11 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.yuyakaido.gaia.account.AccountViewModel
+import com.yuyakaido.gaia.app.LauncherActivity
 import com.yuyakaido.gaia.article.ArticleDetailViewModel
 import com.yuyakaido.gaia.article.ArticleListViewModel
+import com.yuyakaido.gaia.auth.OAuth
+import com.yuyakaido.gaia.auth.Session
 import com.yuyakaido.gaia.core.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -40,6 +43,18 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MainScreen(
                 application = application,
+                addNewAccount = {
+                    startActivity(Intent(Intent.ACTION_VIEW, OAuth.uri))
+                    finish()
+                },
+                activateSession = {
+                    Session.activate(
+                        application = application,
+                        session = it
+                    )
+                    startActivity(LauncherActivity.createIntent(this))
+                    finish()
+                },
                 mainViewModelFactory = mainViewModelFactory,
                 articleListViewModelFactory = articleListViewModelFactory,
                 articleDetailViewModelFactory = articleDetailViewModelFactory,
