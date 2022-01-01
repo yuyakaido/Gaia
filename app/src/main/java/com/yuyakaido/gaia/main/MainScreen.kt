@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,9 +28,7 @@ import com.yuyakaido.gaia.app.Screen
 import com.yuyakaido.gaia.article.ArticleDetailScreen
 import com.yuyakaido.gaia.article.ArticleDetailViewModel
 import com.yuyakaido.gaia.article.ArticleListScreen
-import com.yuyakaido.gaia.article.ArticleListViewModel
 import com.yuyakaido.gaia.auth.Session
-import com.yuyakaido.gaia.core.ViewModelFactory
 import com.yuyakaido.gaia.message.MessageListScreen
 import com.yuyakaido.gaia.message.MessageListViewModel
 import kotlinx.coroutines.launch
@@ -41,12 +39,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 fun MainScreen(
     application: Application,
     addNewAccount: () -> Unit,
-    activateSession: (session: Session) -> Unit,
-    mainViewModelFactory: ViewModelFactory<MainViewModel>,
-    articleListViewModelFactory: ViewModelFactory<ArticleListViewModel>,
-    articleDetailViewModelFactory: ViewModelFactory<ArticleDetailViewModel>,
-    messageListViewModelFactory: ViewModelFactory<MessageListViewModel>,
-    accountViewModelFactory: ViewModelFactory<AccountViewModel>
+    activateSession: (session: Session) -> Unit
 ) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
@@ -63,10 +56,7 @@ fun MainScreen(
         }
     }
 
-    val mainViewModel = viewModel(
-        modelClass = MainViewModel::class.java,
-        factory = mainViewModelFactory
-    )
+    val mainViewModel = hiltViewModel<MainViewModel>()
     val sessions = mainViewModel.sessions.value
 
     Scaffold(
@@ -89,34 +79,22 @@ fun MainScreen(
             composable(route = Screen.ArticleList.route) {
                 ArticleListScreen(
                     navController = navController,
-                    viewModel = viewModel(
-                        modelClass = ArticleListViewModel::class.java,
-                        factory = articleListViewModelFactory
-                    )
+                    viewModel = hiltViewModel()
                 )
             }
             composable(route = Screen.ArticleDetail.route) {
                 val arguments = requireNotNull(it.arguments)
                 val id = requireNotNull(arguments.getString("id"))
-                val viewModel = viewModel(
-                    modelClass = ArticleDetailViewModel::class.java,
-                    factory = articleDetailViewModelFactory
-                )
+                val viewModel = hiltViewModel<ArticleDetailViewModel>()
                 viewModel.onCreate(id = id)
                 ArticleDetailScreen(viewModel = viewModel)
             }
             composable(route = Screen.MessageList.route) {
-                val viewModel = viewModel(
-                    modelClass = MessageListViewModel::class.java,
-                    factory = messageListViewModelFactory
-                )
+                val viewModel = hiltViewModel<MessageListViewModel>()
                 MessageListScreen(viewModel = viewModel)
             }
             composable(route = Screen.Account.route) {
-                val viewModel = viewModel(
-                    modelClass = AccountViewModel::class.java,
-                    factory = accountViewModelFactory
-                )
+                val viewModel = hiltViewModel<AccountViewModel>()
                 AccountScreen(viewModel = viewModel)
             }
         }
