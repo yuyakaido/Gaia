@@ -1,6 +1,7 @@
 package com.yuyakaido.gaia.article
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.yuyakaido.gaia.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +11,7 @@ import javax.inject.Inject
 @ExperimentalSerializationApi
 @HiltViewModel
 class ArticleDetailViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val repository: ArticleRepository
 ) : ViewModel() {
 
@@ -20,9 +22,12 @@ class ArticleDetailViewModel @Inject constructor(
 
     val state = mutableStateOf<State>(State.Initial)
 
-    fun onCreate(id: String) {
-        val article = repository.getArticle(id = id)
-        state.value = State.Ideal(article = article)
+    init {
+        val id = savedStateHandle.get<String>("id")
+        id?.let {
+            val article = repository.getArticle(id = id)
+            state.value = State.Ideal(article = article)
+        }
     }
 
 }

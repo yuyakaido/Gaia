@@ -17,10 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yuyakaido.gaia.R
 import com.yuyakaido.gaia.account.AccountScreen
 import com.yuyakaido.gaia.account.AccountViewModel
@@ -82,11 +84,13 @@ fun MainScreen(
                     viewModel = hiltViewModel()
                 )
             }
-            composable(route = Screen.ArticleDetail.route) {
-                val arguments = requireNotNull(it.arguments)
-                val id = requireNotNull(arguments.getString("id"))
+            composable(
+                route = Screen.ArticleDetail.route,
+                arguments = listOf(
+                    navArgument("id") { type = NavType.StringType }
+                )
+            ) {
                 val viewModel = hiltViewModel<ArticleDetailViewModel>()
-                viewModel.onCreate(id = id)
                 ArticleDetailScreen(viewModel = viewModel)
             }
             composable(route = Screen.MessageList.route) {
