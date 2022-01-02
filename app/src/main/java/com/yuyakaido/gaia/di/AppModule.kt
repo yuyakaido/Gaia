@@ -9,6 +9,7 @@ import com.yuyakaido.gaia.auth.AuthApi
 import com.yuyakaido.gaia.auth.AuthInterceptor
 import com.yuyakaido.gaia.auth.BasicAuthInterceptor
 import com.yuyakaido.gaia.auth.TokenAuthenticator
+import com.yuyakaido.gaia.core.BigDecimalSerializer
 import com.yuyakaido.gaia.domain.Kind
 import com.yuyakaido.gaia.message.MessageApi
 import dagger.Module
@@ -18,6 +19,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.serializersModuleOf
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,6 +43,7 @@ class AppModule {
         return Json {
             ignoreUnknownKeys = true
             classDiscriminator = Kind.classDiscriminator
+            serializersModule = serializersModuleOf(BigDecimalSerializer)
         }
     }
 
