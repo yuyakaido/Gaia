@@ -1,6 +1,7 @@
 package com.yuyakaido.gaia.main
 
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -95,7 +96,12 @@ fun MainScreen(
             }
             composable(route = Screen.MessageList.route) {
                 val viewModel = hiltViewModel<MessageListViewModel>()
-                MessageListScreen(viewModel = viewModel)
+                MessageListScreen(
+                    viewModel = viewModel,
+                    onMessageClicked = { message ->
+                        Toast.makeText(application, message.body, Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
             composable(route = Screen.Account.route) {
                 val viewModel = hiltViewModel<AccountViewModel>()
