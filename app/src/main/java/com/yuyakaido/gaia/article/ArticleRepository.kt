@@ -1,5 +1,6 @@
 package com.yuyakaido.gaia.article
 
+import com.yuyakaido.gaia.core.ListingResult
 import com.yuyakaido.gaia.domain.Article
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
@@ -13,12 +14,14 @@ class ArticleRepository @Inject constructor(
 
     private val cache = mutableSetOf<Article>()
 
-    suspend fun getPopularArticles(): List<Article> {
-        val articles = api
-            .getPopularArticles()
+    suspend fun getPopularArticles(
+        after: String?
+    ): ListingResult<Article> {
+        val result = api
+            .getPopularArticles(after = after)
             .toArticles()
-        cache.addAll(articles)
-        return articles
+        cache.addAll(result.items)
+        return result
     }
 
     fun getArticle(id: String): Article {

@@ -80,11 +80,15 @@ data class ListResponse(
             abstract val data: Data
         }
     }
-    fun toArticles(): List<Article> {
-        return data
-            .children
-            .filterIsInstance<Data.Child.Article>()
-            .map { it.toArticle() }
+    fun toArticles(): ListingResult<Article> {
+        return ListingResult(
+            items = data
+                .children
+                .filterIsInstance<Data.Child.Article>()
+                .map { it.toArticle() },
+            before = data.before,
+            after = data.after
+        )
     }
     fun toMessages(json: Json): List<Message> {
         return data
