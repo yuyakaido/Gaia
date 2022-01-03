@@ -75,37 +75,43 @@ fun MainScreen(
             )
         }
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = Screen.ArticleList.route
+        Surface(
+            modifier = Modifier.padding(
+                bottom = it.calculateBottomPadding()
+            )
         ) {
-            composable(route = Screen.ArticleList.route) {
-                ArticleListScreen(
-                    navController = navController,
-                    viewModel = hiltViewModel()
-                )
-            }
-            composable(
-                route = Screen.ArticleDetail.route,
-                arguments = listOf(
-                    navArgument("id") { type = NavType.StringType }
-                )
+            NavHost(
+                navController = navController,
+                startDestination = Screen.ArticleList.route
             ) {
-                val viewModel = hiltViewModel<ArticleDetailViewModel>()
-                ArticleDetailScreen(viewModel = viewModel)
-            }
-            composable(route = Screen.MessageList.route) {
-                val viewModel = hiltViewModel<MessageListViewModel>()
-                MessageListScreen(
-                    viewModel = viewModel,
-                    onMessageClicked = { message ->
-                        Toast.makeText(application, message.body, Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
-            composable(route = Screen.Account.route) {
-                val viewModel = hiltViewModel<AccountViewModel>()
-                AccountScreen(viewModel = viewModel)
+                composable(route = Screen.ArticleList.route) {
+                    ArticleListScreen(
+                        navController = navController,
+                        viewModel = hiltViewModel()
+                    )
+                }
+                composable(
+                    route = Screen.ArticleDetail.route,
+                    arguments = listOf(
+                        navArgument("id") { type = NavType.StringType }
+                    )
+                ) {
+                    val viewModel = hiltViewModel<ArticleDetailViewModel>()
+                    ArticleDetailScreen(viewModel = viewModel)
+                }
+                composable(route = Screen.MessageList.route) {
+                    val viewModel = hiltViewModel<MessageListViewModel>()
+                    MessageListScreen(
+                        viewModel = viewModel,
+                        onMessageClicked = { message ->
+                            Toast.makeText(application, message.body, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+                composable(route = Screen.Account.route) {
+                    val viewModel = hiltViewModel<AccountViewModel>()
+                    AccountScreen(viewModel = viewModel)
+                }
             }
         }
     }
