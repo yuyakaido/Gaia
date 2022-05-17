@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -31,7 +32,7 @@ import com.yuyakaido.gaia.app.Screen
 import com.yuyakaido.gaia.article.ArticleDetailScreen
 import com.yuyakaido.gaia.article.ArticleDetailViewModel
 import com.yuyakaido.gaia.article.ArticleListScreen
-import com.yuyakaido.gaia.auth.Session
+import com.yuyakaido.gaia.session.Session
 import com.yuyakaido.gaia.message.MessageListScreen
 import com.yuyakaido.gaia.message.MessageListViewModel
 import kotlinx.coroutines.launch

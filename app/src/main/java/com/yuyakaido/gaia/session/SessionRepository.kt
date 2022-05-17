@@ -1,45 +1,50 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.session
 
 import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@Serializable
-data class Session(
-    @SerialName("id") val id: String,
-    @SerialName("name") val name: String,
-    @SerialName("token") val token: Token
+@Singleton
+class SessionRepository @Inject constructor(
+    private val application: Application
 ) {
-    val bearerToken get() = "bearer ${token.accessToken}"
 
     companion object {
         private const val SESSIONS = "sessions"
         private const val ACTIVE_SESSIONS = "active_sessions"
         private const val ACTIVE_SESSION_INDEX = "active_session_index"
+    }
 
-        fun all(application: Application): List<Session> {
+    suspend fun getAllSessions(): List<Session> {
+        return withContext(Dispatchers.IO) {
             val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
             val json = preference.getString(ACTIVE_SESSIONS, null)
-            return if (json == null) {
+            if (json == null) {
                 emptyList()
             } else {
                 Json.decodeFromString<JsonArray>(json)
                     .map { Json.decodeFromJsonElement(it) }
             }
         }
+    }
 
-        fun get(application: Application): Session? {
+    suspend fun getActiveSession(): Session? {
+        return withContext(Dispatchers.IO) {
             val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
             val activeSessionIndex = preference.getInt(ACTIVE_SESSION_INDEX, 0)
-            return all(application).getOrNull(activeSessionIndex)
+            getAllSessions().getOrNull(activeSessionIndex)
         }
+    }
 
-        fun put(application: Application, session: Session) {
-            val currentActiveSessions = all(application)
+    suspend fun putSession(session: Session) {
+        withContext(Dispatchers.IO) {
+            val currentActiveSessions = getAllSessions()
             val existsActiveSession = currentActiveSessions.any { it.id == session.id }
             val newActiveSessions = if (existsActiveSession) {
                 currentActiveSessions.map {
@@ -66,9 +71,11 @@ data class Session(
                 putInt(ACTIVE_SESSION_INDEX, newActiveSessionIndex)
             }
         }
+    }
 
-        fun activate(application: Application, session: Session) {
-            val sessions = all(application = application)
+    suspend fun activateSession(session: Session) {
+        withContext(Dispatchers.IO) {
+            val sessions = getAllSessions()
             val activeSessionIndex = sessions.indexOf(session)
 
             val preference = application.getSharedPreferences(SESSIONS, Context.MODE_PRIVATE)
@@ -77,4 +84,5 @@ data class Session(
             }
         }
     }
+
 }

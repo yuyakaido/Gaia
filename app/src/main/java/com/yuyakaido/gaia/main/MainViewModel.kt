@@ -1,17 +1,25 @@
 package com.yuyakaido.gaia.main
 
-import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.yuyakaido.gaia.auth.Session
+import androidx.lifecycle.viewModelScope
+import com.yuyakaido.gaia.session.Session
+import com.yuyakaido.gaia.session.SessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    application: Application
+    private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    val sessions = mutableStateOf(Session.all(application = application))
+    val sessions = mutableStateOf<List<Session>>(emptyList())
+
+    init {
+        viewModelScope.launch {
+            sessions.value = sessionRepository.getAllSessions()
+        }
+    }
 
 }

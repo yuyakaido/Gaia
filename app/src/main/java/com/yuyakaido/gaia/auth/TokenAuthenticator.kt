@@ -1,26 +1,26 @@
 package com.yuyakaido.gaia.auth
 
-import android.app.Application
+import com.yuyakaido.gaia.session.SessionRepository
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
-import okhttp3.*
+import okhttp3.Authenticator
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
 
 @ExperimentalSerializationApi
 class TokenAuthenticator(
-    private val application: Application,
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val sessionRepository: SessionRepository
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
-            val oldSession = Session.get(application = application)
+            val oldSession = sessionRepository.getActiveSession()
             oldSession?.token?.refreshToken?.let {
                 val newToken = authApi.refreshAccessToken(refreshToken = it).toToken()
                 val newSession = oldSession.copy(token = newToken)
-                Session.put(
-                    application = application,
-                    session = newSession
-                )
+                sessionRepository.putSession(newSession)
                 return@runBlocking response
                     .request
                     .newBuilder()

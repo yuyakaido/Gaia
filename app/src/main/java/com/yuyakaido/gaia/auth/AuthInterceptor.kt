@@ -1,23 +1,26 @@
 package com.yuyakaido.gaia.auth
 
-import android.app.Application
+import com.yuyakaido.gaia.session.SessionRepository
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(
-    private val application: Application
+    private val sessionRepository: SessionRepository
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val session = Session.get(application)
-        return session?.let {
-            chain.proceed(
-                chain.request()
-                    .newBuilder()
-                    .addHeader("Authorization", it.bearerToken)
-                    .build()
-            )
-        } ?: chain.proceed(chain.request())
+        return runBlocking {
+            val session = sessionRepository.getActiveSession()
+            session?.let {
+                chain.proceed(
+                    chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization", it.bearerToken)
+                        .build()
+                )
+            } ?: chain.proceed(chain.request())
+        }
     }
 
 }

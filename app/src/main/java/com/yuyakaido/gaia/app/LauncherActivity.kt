@@ -3,11 +3,12 @@ package com.yuyakaido.gaia.app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.yuyakaido.gaia.auth.AuthApi
+import androidx.lifecycle.lifecycleScope
 import com.yuyakaido.gaia.auth.OAuth
-import com.yuyakaido.gaia.auth.Session
 import com.yuyakaido.gaia.main.MainActivity
+import com.yuyakaido.gaia.session.SessionRepository
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
@@ -21,17 +22,19 @@ class LauncherActivity : DaggerAppCompatActivity() {
     }
 
     @Inject
-    internal lateinit var authApi: AuthApi
+    internal lateinit var sessionRepository: SessionRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val session = Session.get(application)
-        if (session == null) {
-            startActivity(Intent(Intent.ACTION_VIEW, OAuth.uri))
-        } else {
-            startActivity(MainActivity.createIntent(this))
+        lifecycleScope.launch {
+            val session = sessionRepository.getActiveSession()
+            if (session == null) {
+                startActivity(Intent(Intent.ACTION_VIEW, OAuth.uri))
+            } else {
+                startActivity(MainActivity.createIntent(this@LauncherActivity))
+            }
+            finish()
         }
-        finish()
     }
 
 }

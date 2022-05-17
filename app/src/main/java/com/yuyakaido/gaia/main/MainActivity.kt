@@ -6,11 +6,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.yuyakaido.gaia.app.LauncherActivity
 import com.yuyakaido.gaia.auth.OAuth
-import com.yuyakaido.gaia.auth.Session
+import com.yuyakaido.gaia.session.SessionRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
 @AndroidEntryPoint
@@ -24,6 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
 
+    @Inject
+    internal lateinit var sessionRepository: SessionRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,12 +40,11 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 },
                 activateSession = {
-                    Session.activate(
-                        application = application,
-                        session = it
-                    )
-                    startActivity(LauncherActivity.createIntent(this))
-                    finish()
+                    lifecycleScope.launch {
+                        sessionRepository.activateSession(it)
+                        startActivity(LauncherActivity.createIntent(this@MainActivity))
+                        finish()
+                    }
                 }
             )
         }
