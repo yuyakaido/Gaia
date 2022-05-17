@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
         <activity
-            android:name=".app.LauncherActivity"
+            android:name=".launcher.LauncherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

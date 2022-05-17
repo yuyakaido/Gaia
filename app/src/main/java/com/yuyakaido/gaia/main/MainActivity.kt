@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.yuyakaido.gaia.app.LauncherActivity
+import com.yuyakaido.gaia.launcher.LauncherActivity
 import com.yuyakaido.gaia.auth.OAuth
 import com.yuyakaido.gaia.session.SessionRepository
 import dagger.hilt.android.AndroidEntryPoint
