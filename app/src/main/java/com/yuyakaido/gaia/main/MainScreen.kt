@@ -194,7 +194,11 @@ fun MainDrawer(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = it.name,
+                        text = if (it.isActive) {
+                            "\uD83D\uDD35 ${it.name}"
+                        } else {
+                            it.name
+                        },
                         fontSize = 20.sp,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )

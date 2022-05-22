@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
 data class Session(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
-    @SerialName("token") val token: Token
+    @SerialName("token") val token: Token,
+    @SerialName("is_active") val isActive: Boolean
 ) {
     val bearerToken get() = "bearer ${token.accessToken}"
 }
