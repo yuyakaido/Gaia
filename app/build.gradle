@@ -86,7 +86,7 @@ dependencies {
 
     // Widget
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.20.3'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.6.0'
 
     // Debugging
     implementation 'com.jakewharton.timber:timber:5.0.1'
