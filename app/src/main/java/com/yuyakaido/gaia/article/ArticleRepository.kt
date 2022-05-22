@@ -2,6 +2,7 @@ package com.yuyakaido.gaia.article
 
 import com.yuyakaido.gaia.core.ListingResult
 import com.yuyakaido.gaia.domain.Article
+import com.yuyakaido.gaia.session.ApiClient
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,7 +10,7 @@ import javax.inject.Singleton
 @ExperimentalSerializationApi
 @Singleton
 class ArticleRepository @Inject constructor(
-    private val api: ArticleApi
+    private val apiClient: ApiClient
 ) {
 
     private val cache = mutableSetOf<Article>()
@@ -17,7 +18,7 @@ class ArticleRepository @Inject constructor(
     suspend fun getPopularArticles(
         after: String?
     ): ListingResult<Article> {
-        val result = api
+        val result = apiClient.getArticleApi()
             .getPopularArticles(after = after)
             .toArticles()
         cache.addAll(result.items)
