@@ -3,10 +3,12 @@ package com.yuyakaido.gaia.session
 import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
+import com.yuyakaido.gaia.auth.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,6 +42,14 @@ class SessionRepository @Inject constructor(
             val activeSessionIndex = preference.getInt(ACTIVE_SESSION_INDEX, 0)
             getAllSessions().getOrNull(activeSessionIndex)
         }
+    }
+
+    suspend fun createSession(token: Token): Session {
+        return Session(
+            id = UUID.randomUUID().toString(),
+            name = "",
+            token = token
+        ).also { putSession(it) }
     }
 
     suspend fun putSession(session: Session) {

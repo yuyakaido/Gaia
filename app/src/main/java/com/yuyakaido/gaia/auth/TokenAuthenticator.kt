@@ -10,15 +10,15 @@ import okhttp3.Route
 
 @ExperimentalSerializationApi
 class TokenAuthenticator(
-    private val authApi: AuthApi,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
+    private val authRepository: AuthRepository
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
             val oldSession = sessionRepository.getActiveSession()
             oldSession?.token?.refreshToken?.let {
-                val newToken = authApi.refreshAccessToken(refreshToken = it).toToken()
+                val newToken = authRepository.refreshAccessToken(refreshToken = it)
                 val newSession = oldSession.copy(token = newToken)
                 sessionRepository.putSession(newSession)
                 return@runBlocking response

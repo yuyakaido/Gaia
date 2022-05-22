@@ -4,10 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yuyakaido.gaia.account.AccountApi
 import com.yuyakaido.gaia.article.ArticleApi
-import com.yuyakaido.gaia.auth.AuthApi
-import com.yuyakaido.gaia.auth.AuthInterceptor
-import com.yuyakaido.gaia.auth.BasicAuthInterceptor
-import com.yuyakaido.gaia.auth.TokenAuthenticator
+import com.yuyakaido.gaia.auth.*
 import com.yuyakaido.gaia.core.BigDecimalSerializer
 import com.yuyakaido.gaia.domain.Kind
 import com.yuyakaido.gaia.message.MessageApi
@@ -82,14 +79,14 @@ class AppModule {
     @Provides
     fun provideOkHttpClientForPrivate(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        authApi: AuthApi,
-        sessionRepository: SessionRepository
+        sessionRepository: SessionRepository,
+        authRepository: AuthRepository
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .authenticator(
                 TokenAuthenticator(
-                    authApi = authApi,
-                    sessionRepository = sessionRepository
+                    sessionRepository = sessionRepository,
+                    authRepository = authRepository
                 )
             )
             .addInterceptor(StethoInterceptor())
