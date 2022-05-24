@@ -1,33 +1,35 @@
 package com.yuyakaido.gaia.article
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @ExperimentalSerializationApi
 @HiltViewModel
 class ArticleDetailViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
-    private val repository: ArticleRepository
+    savedStateHandle: SavedStateHandle,
+    repository: ArticleRepository
 ) : ViewModel() {
 
     sealed class State {
-        object Initial : State()
+        object Loading : State()
         data class Ideal(val article: Article) : State()
     }
 
-    val state = mutableStateOf<State>(State.Initial)
-
-    init {
-        val id = savedStateHandle.get<String>("id")
-        id?.let {
-            val article = repository.getArticle(id = id)
-            state.value = State.Ideal(article = article)
-        }
-    }
+    private val id = requireNotNull(savedStateHandle.get<String>("id"))
+    val state = repository.observeArticle(id)
+        .map { State.Ideal(it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = State.Loading
+        )
 
 }

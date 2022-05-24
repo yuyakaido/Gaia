@@ -1,8 +1,11 @@
 package com.yuyakaido.gaia.article
 
-import com.yuyakaido.gaia.core.ListingResult
 import com.yuyakaido.gaia.domain.Article
 import com.yuyakaido.gaia.session.ApiClient
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,20 +16,27 @@ class ArticleRepository @Inject constructor(
     private val apiClient: ApiClient
 ) {
 
-    private val cache = mutableSetOf<Article>()
+    private val articles = MutableStateFlow(emptyList<Article>())
 
-    suspend fun getPopularArticles(
-        after: String?
-    ): ListingResult<Article> {
+    fun observeArticles(): StateFlow<List<Article>> {
+        return articles
+    }
+
+    fun observeArticle(id: String): Flow<Article> {
+        return articles.mapNotNull { it.firstOrNull { article -> article.id == id } }
+    }
+
+    suspend fun paginate(
+        after: String?,
+        refresh: Boolean = false
+    ) {
+        if (refresh) {
+            articles.emit(emptyList())
+        }
         val result = apiClient.getArticleApi()
             .getPopularArticles(after = after)
             .toArticles()
-        cache.addAll(result.items)
-        return result
-    }
-
-    fun getArticle(id: String): Article {
-        return cache.first { it.id == id }
+        articles.emit(articles.value.plus(result.items))
     }
 
 }

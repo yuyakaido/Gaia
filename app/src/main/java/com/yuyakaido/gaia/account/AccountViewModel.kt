@@ -1,10 +1,12 @@
 package com.yuyakaido.gaia.account
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.domain.Account
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,23 +16,21 @@ class AccountViewModel @Inject constructor(
 ) : ViewModel() {
 
     sealed class State {
-        object Initial : State()
         object Loading : State()
-        object Error : State()
         data class Ideal(val account: Account) : State()
     }
 
-    val state = mutableStateOf<State>(State.Initial)
+    val state = accountRepository.observeMe()
+        .map { State.Ideal(it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = State.Loading
+        )
 
     init {
         viewModelScope.launch {
-            state.value = State.Loading
-            try {
-                val account = accountRepository.getMe()
-                state.value = State.Ideal(account = account)
-            } catch (e: Exception) {
-                state.value = State.Error
-            }
+            accountRepository.refreshMe()
         }
     }
 

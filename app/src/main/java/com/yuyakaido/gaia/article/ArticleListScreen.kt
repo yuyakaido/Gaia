@@ -6,8 +6,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,10 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -32,10 +31,11 @@ fun ArticleListScreen(
     navController: NavController,
     viewModel: ArticleListViewModel
 ) {
-    val items = viewModel.items.collectAsLazyPagingItems()
+    val state by viewModel.state.collectAsState()
     ArticleList(
         navController = navController,
-        pagingItems = items
+        state = state,
+        onRefresh = { viewModel.refresh() }
     )
 }
 
@@ -43,15 +43,15 @@ fun ArticleListScreen(
 @Composable
 fun ArticleList(
     navController: NavController,
-    pagingItems: LazyPagingItems<Article>
+    state: ArticleListViewModel.State,
+    onRefresh: () -> Unit
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(
-            isRefreshing = pagingItems.loadState.prepend is LoadState.Loading
-                    || pagingItems.loadState.append is LoadState.Loading
-                    || pagingItems.loadState.refresh is LoadState.Loading
+            isRefreshing = state.isLoading
         ),
-        onRefresh = { pagingItems.refresh() }
+        onRefresh = { onRefresh.invoke() },
+        modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
             contentPadding = PaddingValues(
@@ -59,13 +59,11 @@ fun ArticleList(
                 horizontal = 16.dp
             )
         ) {
-            items(pagingItems) {
-                it?.let {
-                    ArticleItem(
-                        navController = navController,
-                        article = it
-                    )
-                }
+            items(state.articles) {
+                ArticleItem(
+                    navController = navController,
+                    article = it
+                )
             }
         }
     }

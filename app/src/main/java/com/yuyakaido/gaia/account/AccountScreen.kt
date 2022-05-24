@@ -3,8 +3,11 @@ package com.yuyakaido.gaia.account
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,14 +23,18 @@ import java.time.format.FormatStyle
 fun AccountScreen(
     viewModel: AccountViewModel
 ) {
-    when (val state = viewModel.state.value) {
-        is AccountViewModel.State.Initial,
-        is AccountViewModel.State.Loading,
-        is AccountViewModel.State.Error -> {
-            Text(text = state::class.java.simpleName)
+    val state by viewModel.state.collectAsState()
+    when (val s = state) {
+        is AccountViewModel.State.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
         is AccountViewModel.State.Ideal -> {
-            val account = state.account
+            val account = s.account
             Row(modifier = Modifier.padding(16.dp)) {
                 Image(
                     painter = rememberImagePainter(

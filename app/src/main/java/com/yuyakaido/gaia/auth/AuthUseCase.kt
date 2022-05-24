@@ -15,7 +15,7 @@ class AuthUseCase @Inject constructor(
     suspend fun authorize(code: String) {
         val token = authRepository.getAccessToken(code)
         val session = sessionRepository.createSession(token)
-        val account = accountRepository.getMe()
+        val account = accountRepository.refreshMe()
         sessionRepository.putSession(session.copy(name = account.name))
     }
 
