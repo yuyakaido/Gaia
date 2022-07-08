@@ -5,5 +5,17 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
 rootProject.name = 'Gaia'
+
+// Apps
 include ':app'
+
+// Cores
+include ':cores:core'
+
+// Features
+include ':features:auth'
+include ':features:account'
+include ':features:article'
+include ':features:message'

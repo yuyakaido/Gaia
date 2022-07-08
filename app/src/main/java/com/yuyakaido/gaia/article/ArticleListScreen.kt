@@ -2,7 +2,6 @@ package com.yuyakaido.gaia.article
 
 import android.net.Uri
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.yuyakaido.gaia.app.Screen
@@ -109,10 +108,8 @@ fun ThumbnailImage(uri: Uri) {
             }
         )
     } else {
-        Image(
-            painter = rememberImagePainter(
-                data = uri.toString()
-            ),
+        AsyncImage(
+            model = uri,
             contentDescription = null,
             modifier = Modifier.size(
                 width = width,

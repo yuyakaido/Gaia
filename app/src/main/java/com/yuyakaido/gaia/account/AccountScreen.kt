@@ -1,6 +1,5 @@
 package com.yuyakaido.gaia.account
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
@@ -15,7 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -36,10 +35,8 @@ fun AccountScreen(
         is AccountViewModel.State.Ideal -> {
             val account = s.account
             Row(modifier = Modifier.padding(16.dp)) {
-                Image(
-                    painter = rememberImagePainter(
-                        data = account.icon
-                    ),
+                AsyncImage(
+                    model = account.icon,
                     contentDescription = null,
                     modifier = Modifier
                         .size(120.dp)
