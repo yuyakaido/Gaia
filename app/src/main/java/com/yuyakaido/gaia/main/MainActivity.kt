@@ -7,9 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.yuyakaido.gaia.launcher.LauncherActivity
 import com.yuyakaido.gaia.auth.OAuth
-import com.yuyakaido.gaia.session.SessionRepository
+import com.yuyakaido.gaia.core.domain.SessionRepository
+import com.yuyakaido.gaia.launcher.LauncherActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi

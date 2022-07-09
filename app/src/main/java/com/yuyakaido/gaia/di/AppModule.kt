@@ -2,13 +2,10 @@ package com.yuyakaido.gaia.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.yuyakaido.gaia.account.AccountApi
-import com.yuyakaido.gaia.article.ArticleApi
 import com.yuyakaido.gaia.auth.*
-import com.yuyakaido.gaia.core.BigDecimalSerializer
-import com.yuyakaido.gaia.domain.Kind
-import com.yuyakaido.gaia.message.MessageApi
-import com.yuyakaido.gaia.session.SessionRepository
+import com.yuyakaido.gaia.core.domain.Kind
+import com.yuyakaido.gaia.core.domain.SessionRepository
+import com.yuyakaido.gaia.core.infra.*
 import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule

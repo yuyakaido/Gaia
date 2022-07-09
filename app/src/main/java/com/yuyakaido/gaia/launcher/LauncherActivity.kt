@@ -9,7 +9,6 @@ import com.yuyakaido.gaia.auth.OAuth
 import com.yuyakaido.gaia.main.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 

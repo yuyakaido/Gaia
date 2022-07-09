@@ -5,7 +5,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.yuyakaido.gaia.app.Screen
+import com.yuyakaido.gaia.core.presentation.Screen
 
 enum class MainNavigationItem(
     val route: String,

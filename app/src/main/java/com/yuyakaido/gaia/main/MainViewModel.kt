@@ -3,8 +3,8 @@ package com.yuyakaido.gaia.main
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yuyakaido.gaia.session.Session
-import com.yuyakaido.gaia.session.SessionRepository
+import com.yuyakaido.gaia.core.domain.Session
+import com.yuyakaido.gaia.core.domain.SessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
