@@ -3,15 +3,19 @@ package com.yuyakaido.gaia.auth
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.yuyakaido.gaia.main.MainActivity
+import com.yuyakaido.gaia.core.presentation.AppIntentResolverType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.ExperimentalSerializationApi
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<AuthViewModel>()
+
+    @Inject
+    internal lateinit var appIntentResolver: AppIntentResolverType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +44,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(MainActivity.createIntent(this))
+        startActivity(appIntentResolver.getMainActivityIntent(this))
         finish()
     }
 
