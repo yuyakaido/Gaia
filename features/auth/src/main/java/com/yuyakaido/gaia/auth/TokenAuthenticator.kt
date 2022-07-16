@@ -2,13 +2,11 @@ package com.yuyakaido.gaia.auth
 
 import com.yuyakaido.gaia.core.domain.SessionRepository
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 
-@ExperimentalSerializationApi
 class TokenAuthenticator(
     private val sessionRepository: SessionRepository,
     private val authRepository: AuthRepository

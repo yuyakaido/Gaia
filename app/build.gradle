@@ -17,6 +17,7 @@ android {
         versionName '0.0.0'
     }
     buildFeatures {
+        viewBinding true
         compose true
     }
     compileOptions {

@@ -9,10 +9,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
-@ExperimentalSerializationApi
 @HiltViewModel
 class ArticleListViewModel @Inject constructor(
     private val repository: ArticleRepository

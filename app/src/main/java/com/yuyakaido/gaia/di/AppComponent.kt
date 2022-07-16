@@ -6,9 +6,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@ExperimentalSerializationApi
 @InstallIn(SingletonComponent::class)
 @EntryPoint
 interface AppComponent : AndroidInjector<GaiaApp> {

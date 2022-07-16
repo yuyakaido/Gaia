@@ -13,7 +13,6 @@ import dagger.Provides
 import dagger.android.AndroidInjectionModule
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.serializersModuleOf
 import okhttp3.MediaType.Companion.toMediaType
@@ -23,7 +22,6 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@ExperimentalSerializationApi
 @InstallIn(SingletonComponent::class)
 @Module(
     includes = [

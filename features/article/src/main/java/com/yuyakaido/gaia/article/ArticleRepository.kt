@@ -6,11 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@ExperimentalSerializationApi
 @Singleton
 class ArticleRepository @Inject constructor(
     private val apiClient: ApiClient

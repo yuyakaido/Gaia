@@ -35,9 +35,7 @@ import com.yuyakaido.gaia.core.presentation.Screen
 import com.yuyakaido.gaia.message.MessageListScreen
 import com.yuyakaido.gaia.message.MessageListViewModel
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@ExperimentalSerializationApi
 @Composable
 fun MainScreen(
     application: Application,
@@ -85,10 +83,7 @@ fun MainScreen(
                 startDestination = Screen.ArticleList.route
             ) {
                 composable(route = Screen.ArticleList.route) {
-                    ArticleListScreen(
-                        navController = navController,
-                        viewModel = hiltViewModel()
-                    )
+                    ArticleListScreen(viewModel = hiltViewModel())
                 }
                 composable(
                     route = Screen.ArticleDetail.route,

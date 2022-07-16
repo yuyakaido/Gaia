@@ -5,9 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@ExperimentalSerializationApi
 @Composable
 fun ArticleDetailScreen(
     viewModel: ArticleDetailViewModel

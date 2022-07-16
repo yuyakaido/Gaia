@@ -8,10 +8,8 @@ import dagger.android.AndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.serialization.ExperimentalSerializationApi
 import timber.log.Timber
 
-@ExperimentalSerializationApi
 @HiltAndroidApp
 class GaiaApp : Application(), HasAndroidInjector {
 

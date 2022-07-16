@@ -2,7 +2,6 @@ package com.yuyakaido.gaia.article
 
 import android.net.Uri
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,32 +15,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.yuyakaido.gaia.core.domain.Article
-import com.yuyakaido.gaia.core.presentation.Screen
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@ExperimentalSerializationApi
 @Composable
 fun ArticleListScreen(
-    navController: NavController,
     viewModel: ArticleListViewModel
 ) {
     val state by viewModel.state.collectAsState()
     ArticleList(
-        navController = navController,
         state = state,
         onRefresh = { viewModel.refresh() }
     )
 }
 
-@ExperimentalSerializationApi
 @Composable
 fun ArticleList(
-    navController: NavController,
     state: ArticleListViewModel.State,
     onRefresh: () -> Unit
 ) {
@@ -59,10 +50,7 @@ fun ArticleList(
             )
         ) {
             items(state.articles) {
-                ArticleItem(
-                    navController = navController,
-                    article = it
-                )
+                ArticleItem(article = it)
             }
         }
     }
@@ -70,17 +58,10 @@ fun ArticleList(
 
 @Composable
 fun ArticleItem(
-    navController: NavController,
     article: Article
 ) {
     Row(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .clickable {
-                navController.navigate(
-                    route = Screen.ArticleDetail.createRoute(article.id)
-                )
-            }
+        modifier = Modifier.padding(vertical = 8.dp)
     ) {
         ThumbnailImage(uri = article.thumbnail)
         Spacer(modifier = Modifier.size(16.dp))

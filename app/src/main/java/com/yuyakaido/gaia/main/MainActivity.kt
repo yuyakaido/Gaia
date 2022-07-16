@@ -3,19 +3,16 @@ package com.yuyakaido.gaia.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.yuyakaido.gaia.auth.OAuth
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.yuyakaido.gaia.R
 import com.yuyakaido.gaia.core.domain.SessionRepository
-import com.yuyakaido.gaia.launcher.LauncherActivity
+import com.yuyakaido.gaia.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
-@ExperimentalSerializationApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -26,27 +23,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val viewModel by viewModels<MainViewModel>()
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     @Inject
     internal lateinit var sessionRepository: SessionRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MainScreen(
-                application = application,
-                addNewAccount = {
-                    startActivity(Intent(Intent.ACTION_VIEW, OAuth.uri))
-                    finish()
-                },
-                activateSession = {
-                    lifecycleScope.launch {
-                        sessionRepository.activateSession(it)
-                        startActivity(LauncherActivity.createIntent(this@MainActivity))
-                        finish()
-                    }
-                }
-            )
+        setContentView(binding.root)
+        setupBottomNavigationView()
+    }
+
+    private fun setupBottomNavigationView() {
+        val navHomeFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
+        navHomeFragment?.findNavController()?.let { navController ->
+            binding.bottomNavigationView.setupWithNavController(navController)
         }
     }
 

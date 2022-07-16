@@ -1,6 +1,5 @@
 package com.yuyakaido.gaia.launcher
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -10,17 +9,9 @@ import com.yuyakaido.gaia.main.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@ExperimentalSerializationApi
 @AndroidEntryPoint
 class LauncherActivity : DaggerAppCompatActivity() {
-
-    companion object {
-        fun createIntent(context: Context): Intent {
-            return Intent(context, LauncherActivity::class.java)
-        }
-    }
 
     private val viewModel by viewModels<LauncherViewModel>()
 

@@ -5,10 +5,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.yuyakaido.gaia.core.presentation.AppIntentResolverType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
-@ExperimentalSerializationApi
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 

@@ -15,9 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.yuyakaido.gaia.core.domain.Message
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@ExperimentalSerializationApi
 @Composable
 fun MessageListScreen(
     viewModel: MessageListViewModel,
@@ -40,7 +38,6 @@ fun MessageListScreen(
     }
 }
 
-@ExperimentalSerializationApi
 @Composable
 fun MessageList(
     messages: List<Message>,
