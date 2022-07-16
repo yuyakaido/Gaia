@@ -9,7 +9,7 @@
         />
 
     <item
-        android:id="@+id/fragment_message"
+        android:id="@+id/fragment_message_list"
         android:title="@string/message"
         android:icon="@drawable/ic_message"
         />

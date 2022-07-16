@@ -8,16 +8,19 @@
 
     <fragment
         android:id="@+id/fragment_article_list"
+        android:label="@string/article"
         android:name="com.yuyakaido.gaia.article.ArticleListFragment"
         />
 
     <fragment
-        android:id="@+id/fragment_message"
+        android:id="@+id/fragment_message_list"
+        android:label="@string/message"
         android:name="com.yuyakaido.gaia.message.MessageListFragment"
         />
 
     <fragment
         android:id="@+id/fragment_account"
+        android:label="@string/account"
         android:name="com.yuyakaido.gaia.account.AccountFragment"
         />
 

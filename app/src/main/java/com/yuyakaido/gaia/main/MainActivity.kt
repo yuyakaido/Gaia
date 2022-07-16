@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.yuyakaido.gaia.R
 import com.yuyakaido.gaia.core.domain.SessionRepository
@@ -31,14 +34,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setupActionBar()
         setupBottomNavigationView()
     }
 
-    private fun setupBottomNavigationView() {
+    private fun requireNavController(): NavController {
         val navHomeFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
-        navHomeFragment?.findNavController()?.let { navController ->
-            binding.bottomNavigationView.setupWithNavController(navController)
-        }
+        return requireNotNull(navHomeFragment?.findNavController())
+    }
+
+    // https://developer.android.com/guide/navigation/navigation-ui#top_app_bar
+    private fun setupActionBar() {
+        // https://developer.android.com/guide/navigation/navigation-ui#appbarconfiguration
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.fragment_article_list,
+                R.id.fragment_message_list,
+                R.id.fragment_account
+            )
+        )
+        setupActionBarWithNavController(requireNavController(), appBarConfiguration)
+    }
+
+    // https://developer.android.com/guide/navigation/navigation-ui#bottom_navigation
+    private fun setupBottomNavigationView() {
+        binding.bottomNavigationView.setupWithNavController(requireNavController())
     }
 
 }
