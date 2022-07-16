@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <style name="Theme.Gaia" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="toolbarStyle">@style/Widget.Gaia.Toolbar</item>
+    </style>
+
+    <!-- https://material.io/components/app-bars-top/android#theming-the-top-app-bar -->
+    <style name="Widget.Gaia.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Gaia.Toolbar</item>
+    </style>
+
+    <style name="ThemeOverlay.Gaia.Toolbar" parent="">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+</resources>

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.yuyakaido.gaia.R
 import com.yuyakaido.gaia.core.domain.SessionRepository
@@ -34,7 +33,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setupActionBar()
+        setupTopAppBar()
+        setupNavigationView()
         setupBottomNavigationView()
     }
 
@@ -44,16 +44,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     // https://developer.android.com/guide/navigation/navigation-ui#top_app_bar
-    private fun setupActionBar() {
-        // https://developer.android.com/guide/navigation/navigation-ui#appbarconfiguration
+    private fun setupTopAppBar() {
         val appBarConfiguration = AppBarConfiguration(
-            setOf(
+            topLevelDestinationIds = setOf(
                 R.id.fragment_article_list,
                 R.id.fragment_message_list,
                 R.id.fragment_account
-            )
+            ),
+            drawerLayout = binding.drawerLayout
         )
-        setupActionBarWithNavController(requireNavController(), appBarConfiguration)
+        binding.toolbar.setupWithNavController(requireNavController(), appBarConfiguration)
+    }
+
+    // https://developer.android.com/guide/navigation/navigation-ui#add_a_navigation_drawer
+    private fun setupNavigationView() {
+        binding.navigationView.setupWithNavController(requireNavController())
     }
 
     // https://developer.android.com/guide/navigation/navigation-ui#bottom_navigation
