@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(requireNavController(), appBarConfiguration)
     }
 
+    // https://developer.android.com/guide/navigation/navigation-ui#add_a_navigation_drawer
     private fun setupNavigationView() {
         binding.navigationView.addView(sessionListView)
     }

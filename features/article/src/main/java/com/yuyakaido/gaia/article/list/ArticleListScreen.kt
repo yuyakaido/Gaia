@@ -1,7 +1,8 @@
-package com.yuyakaido.gaia.article
+package com.yuyakaido.gaia.article.list
 
 import android.net.Uri
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,19 +23,22 @@ import com.yuyakaido.gaia.core.domain.Article
 
 @Composable
 fun ArticleListScreen(
-    viewModel: ArticleListViewModel
+    viewModel: ArticleListViewModel,
+    onClick: (article: Article) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     ArticleList(
         state = state,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = { viewModel.refresh() },
+        onClick = onClick
     )
 }
 
 @Composable
 fun ArticleList(
     state: ArticleListViewModel.State,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onClick: (article: Article) -> Unit
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(
@@ -50,7 +54,10 @@ fun ArticleList(
             )
         ) {
             items(state.articles) {
-                ArticleItem(article = it)
+                ArticleItem(
+                    article = it,
+                    onClick = onClick
+                )
             }
         }
     }
@@ -58,10 +65,13 @@ fun ArticleList(
 
 @Composable
 fun ArticleItem(
-    article: Article
+    article: Article,
+    onClick: (article: Article) -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .clickable { onClick.invoke(article) }
     ) {
         ThumbnailImage(uri = article.thumbnail)
         Spacer(modifier = Modifier.size(16.dp))

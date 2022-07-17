@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_article"
+    app:startDestination="@id/fragment_article_list">
+
+    <fragment
+        android:id="@+id/fragment_article_list"
+        android:label="@string/article"
+        android:name="com.yuyakaido.gaia.article.list.ArticleListFragment">
+        <action
+            android:id="@+id/action_article_detail"
+            app:destination="@id/fragment_article_detail"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_article_detail"
+        android:name="com.yuyakaido.gaia.article.detail.ArticleDetailFragment"
+        />
+
+</navigation>

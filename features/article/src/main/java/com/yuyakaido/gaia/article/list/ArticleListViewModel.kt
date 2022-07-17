@@ -1,7 +1,8 @@
-package com.yuyakaido.gaia.article
+package com.yuyakaido.gaia.article.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yuyakaido.gaia.article.ArticleRepository
 import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
