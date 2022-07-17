@@ -55,11 +55,6 @@ dependencies {
     api 'androidx.paging:paging-compose:1.0.0-alpha14'
 
     // Dependency Injection
-    api 'com.google.dagger:dagger:2.42'
-    kapt 'com.google.dagger:dagger-compiler:2.42'
-    api 'com.google.dagger:dagger-android:2.42'
-    api 'com.google.dagger:dagger-android-support:2.42'
-    kapt 'com.google.dagger:dagger-android-processor:2.42'
     api 'com.google.dagger:hilt-android:2.42'
     kapt 'com.google.dagger:hilt-compiler:2.42'
 

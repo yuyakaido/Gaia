@@ -3,23 +3,11 @@ package com.yuyakaido.gaia.app
 import android.app.Application
 import com.facebook.stetho.Stetho
 import com.yuyakaido.gaia.BuildConfig
-import com.yuyakaido.gaia.di.AppComponent
-import dagger.android.AndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
-class GaiaApp : Application(), HasAndroidInjector {
-
-    private val appComponent: AppComponent by lazy {
-        EntryPoints.get(this, AppComponent::class.java)
-    }
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        return appComponent.androidInjector()
-    }
+class GaiaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

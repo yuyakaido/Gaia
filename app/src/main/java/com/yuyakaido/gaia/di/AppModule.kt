@@ -13,7 +13,6 @@ import com.yuyakaido.gaia.core.presentation.AppIntentResolverType
 import com.yuyakaido.gaia.message.infra.MessageApi
 import dagger.Module
 import dagger.Provides
-import dagger.android.AndroidInjectionModule
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
@@ -26,12 +25,7 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
-@Module(
-    includes = [
-        AndroidInjectionModule::class,
-        ActivityModule::class
-    ]
-)
+@Module
 class AppModule {
 
     @Singleton
