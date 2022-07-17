@@ -1,7 +1,7 @@
 package com.yuyakaido.gaia.article
 
-import com.yuyakaido.gaia.core.domain.ApiClient
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.infra.ArticleApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ArticleRepository @Inject constructor(
-    private val apiClient: ApiClient
+    private val api: ArticleApi
 ) {
 
     private val articles = MutableStateFlow(emptyMap<Article.ID, Article>())
@@ -25,9 +25,7 @@ class ArticleRepository @Inject constructor(
     }
 
     suspend fun paginate(after: String?): List<Article> {
-        val result = apiClient.getArticleApi()
-            .getPopularArticles(after = after)
-            .toArticles()
+        val result = api.getPopularArticles(after).toArticles()
         articles.emit(articles.value.plus(result.items.map { it.id to it }))
         return result.items
     }

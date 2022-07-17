@@ -28,7 +28,7 @@ data class ListResponse(
             @Serializable
             sealed class Data {
                 @Serializable
-                data class Article(
+                data class ArticleResponse(
                     @SerialName("id") val id: String,
                     @SerialName("title") val title: String,
                     @SerialName("thumbnail") val thumbnail: String?
@@ -42,7 +42,7 @@ data class ListResponse(
                     }
                 }
                 @Serializable
-                data class Message(
+                data class MessageResponse(
                     @SerialName("id") val id: String,
                     @SerialName("author") val author: String,
                     @SerialName("subject") val subject: String,
@@ -52,12 +52,12 @@ data class ListResponse(
             }
             @Serializable
             @SerialName(Kind.article)
-            data class Article(
-                @SerialName("data") override val data: Data.Article
+            data class ArticleElement(
+                @SerialName("data") override val data: Data.ArticleResponse
             ) : Child() {
-                fun toArticle(): com.yuyakaido.gaia.core.domain.Article {
+                fun toArticle(): Article {
                     return Article(
-                        id = com.yuyakaido.gaia.core.domain.Article.ID(data.id),
+                        id = Article.ID(data.id),
                         title = data.title,
                         thumbnail = data.toThumbnailUri()
                     )
@@ -65,10 +65,10 @@ data class ListResponse(
             }
             @Serializable
             @SerialName(Kind.message)
-            data class Message(
-                @SerialName("data") override val data: Data.Message
+            data class MessageElement(
+                @SerialName("data") override val data: Data.MessageResponse
             ) : Child() {
-                fun toMessage(): com.yuyakaido.gaia.core.domain.Message {
+                fun toMessage(): Message {
                     return Message(
                         id = data.id,
                         author = data.author,
@@ -84,7 +84,7 @@ data class ListResponse(
         return ListingResult(
             items = data
                 .children
-                .filterIsInstance<Data.Child.Article>()
+                .filterIsInstance<Data.Child.ArticleElement>()
                 .map { it.toArticle() },
             before = data.before,
             after = data.after
@@ -93,7 +93,7 @@ data class ListResponse(
     fun toMessages(json: Json): List<Message> {
         return data
             .children
-            .filterIsInstance<Data.Child.Message>()
+            .filterIsInstance<Data.Child.MessageElement>()
             .map {
                 val replies = it.data.replies
                 if (replies is JsonObject) {
