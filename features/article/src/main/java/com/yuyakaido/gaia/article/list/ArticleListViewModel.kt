@@ -5,10 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.article.ArticleRepository
 import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,61 +14,59 @@ class ArticleListViewModel @Inject constructor(
     private val repository: ArticleRepository
 ) : ViewModel() {
 
-    sealed class State {
-        abstract val articles: List<Article>
-        abstract val isLoading: Boolean
-        object Initial : State() {
-            override val isLoading: Boolean = false
-            override val articles: List<Article> = emptyList()
-        }
-        data class Loading(
-            override val articles: List<Article>
-        ) : State() {
-            override val isLoading: Boolean = true
-        }
-        data class Ideal(
-            override val articles: List<Article>
-        ) : State() {
-            override val isLoading: Boolean = false
-        }
-    }
+    data class State(
+        val articles: List<Article> = emptyList(),
+        val isRefreshing: Boolean = false
+    )
 
-    private val articles = repository.observeArticles()
-    private val isLoading = MutableStateFlow(false)
+    private val ids = MutableStateFlow(emptyList<Article.ID>())
+    private val articles = ids.flatMapLatest { repository.observeArticles(it) }
+    private val isRefreshing = MutableStateFlow(false)
+    private val isPaginating = MutableStateFlow(false)
 
     val state = combine(
-        articles, isLoading
-    ) { articles, isLoading ->
-        if (isLoading) {
-            State.Loading(articles = articles)
-        } else {
-            State.Ideal(articles = articles)
-        }
+        articles, isRefreshing
+    ) { articles, isRefreshing ->
+        State(
+            articles = articles,
+            isRefreshing = isRefreshing
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = State.Initial
+        initialValue = State()
     )
 
     init {
-        refresh()
+        onRefresh()
     }
 
-    fun refresh() {
-        paginate(refresh = true)
-    }
-
-    fun paginate(refresh: Boolean = false) {
-        viewModelScope.launch {
-            if (!isLoading.value) {
-                isLoading.value = true
-                repository.paginate(
-                    after = articles.value.firstOrNull()?.id,
-                    refresh = refresh
-                )
-                isLoading.value = false
-            }
+    private suspend fun refresh() {
+        if (!isRefreshing.value) {
+            isRefreshing.value = true
+            paginate(refresh = true)
+            isRefreshing.value = false
         }
+    }
+
+    private suspend fun paginate(refresh: Boolean = false) {
+        if (!isPaginating.value) {
+            isPaginating.value = true
+            if (refresh) {
+                ids.value = emptyList()
+            }
+            val articles = repository.paginate(after = ids.value.lastOrNull()?.forPagination())
+            ids.value = ids.value.plus(articles.map { it.id })
+            isPaginating.value = false
+        }
+    }
+
+    fun onRefresh() {
+        viewModelScope.launch { refresh() }
+    }
+
+    fun onPaginate() {
+        viewModelScope.launch { paginate() }
     }
 
 }

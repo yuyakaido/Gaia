@@ -57,7 +57,7 @@ data class ListResponse(
             ) : Child() {
                 fun toArticle(): com.yuyakaido.gaia.core.domain.Article {
                     return Article(
-                        id = data.id,
+                        id = com.yuyakaido.gaia.core.domain.Article.ID(data.id),
                         title = data.title,
                         thumbnail = data.toThumbnailUri()
                     )

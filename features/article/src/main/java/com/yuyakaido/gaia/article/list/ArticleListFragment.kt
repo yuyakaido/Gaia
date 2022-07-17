@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -25,12 +26,16 @@ class ArticleListFragment : Fragment() {
             // https://developer.android.com/jetpack/compose/interop/interop-apis
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
+                val state = viewModel.state.collectAsState().value
                 ArticleListScreen(
-                    viewModel = viewModel,
+                    articles = state.articles,
+                    isRefreshing = state.isRefreshing,
+                    onRefresh = { viewModel.onRefresh() },
+                    onPaginate = { viewModel.onPaginate() },
                     onClick = {
                         findNavController().navigate(
                             directions = ArticleListFragmentDirections.actionArticleDetail(
-                                articleId = it.id,
+                                articleId = it.id.value,
                                 articleTitle = it.title
                             )
                         )

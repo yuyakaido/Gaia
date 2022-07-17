@@ -6,10 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,27 +23,14 @@ import com.yuyakaido.gaia.core.domain.Article
 
 @Composable
 fun ArticleListScreen(
-    viewModel: ArticleListViewModel,
-    onClick: (article: Article) -> Unit
-) {
-    val state by viewModel.state.collectAsState()
-    ArticleList(
-        state = state,
-        onRefresh = { viewModel.refresh() },
-        onClick = onClick
-    )
-}
-
-@Composable
-fun ArticleList(
-    state: ArticleListViewModel.State,
+    articles: List<Article>,
+    isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    onPaginate: () -> Unit,
     onClick: (article: Article) -> Unit
 ) {
     SwipeRefresh(
-        state = rememberSwipeRefreshState(
-            isRefreshing = state.isLoading
-        ),
+        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
         onRefresh = { onRefresh.invoke() },
         modifier = Modifier.fillMaxSize()
     ) {
@@ -53,11 +40,16 @@ fun ArticleList(
                 horizontal = 16.dp
             )
         ) {
-            items(state.articles) {
+            items(articles) {
                 ArticleItem(
                     article = it,
                     onClick = onClick
                 )
+            }
+            if (articles.isNotEmpty()) {
+                item {
+                    LoadingIndicator { onPaginate.invoke() }
+                }
             }
         }
     }
@@ -109,5 +101,25 @@ fun ThumbnailImage(uri: Uri) {
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop
         )
+    }
+}
+
+@Composable
+fun LoadingIndicator(
+    onPaginate: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            strokeWidth = 2.dp
+        )
+    }
+    LaunchedEffect(Unit) {
+        onPaginate.invoke()
     }
 }

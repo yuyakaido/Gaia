@@ -23,7 +23,7 @@ class ArticleDetailViewModel @Inject constructor(
     }
 
     private val args = ArticleDetailFragmentArgs.fromSavedStateHandle(savedStateHandle)
-    val state = repository.observeArticle(args.articleId)
+    val state = repository.observeArticle(Article.ID(args.articleId))
         .map { State.Ideal(it) }
         .stateIn(
             scope = viewModelScope,
