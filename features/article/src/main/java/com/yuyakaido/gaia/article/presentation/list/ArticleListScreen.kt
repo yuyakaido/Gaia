@@ -8,47 +8,63 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.yuyakaido.gaia.core.R
 import com.yuyakaido.gaia.core.domain.Article
 
 @Composable
 fun ArticleListScreen(
     articles: List<Article>,
     isRefreshing: Boolean,
+    isError: Boolean,
     onRefresh: () -> Unit,
     onPaginate: () -> Unit,
     onClick: (article: Article) -> Unit
 ) {
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-        onRefresh = { onRefresh.invoke() },
-        modifier = Modifier.fillMaxSize()
-    ) {
-        LazyColumn(
-            contentPadding = PaddingValues(
-                vertical = 8.dp,
-                horizontal = 16.dp
-            )
-        ) {
-            items(articles) {
-                ArticleItem(
-                    article = it,
-                    onClick = onClick
-                )
+    if (isError) {
+        Box(contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = stringResource(id = R.string.something_went_wrong))
+                TextButton(onClick = { onRefresh.invoke() }) {
+                    Text(text = stringResource(id = R.string.retry))
+                }
             }
-            if (articles.isNotEmpty()) {
-                item {
-                    LoadingIndicator { onPaginate.invoke() }
+        }
+    } else {
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+            onRefresh = { onRefresh.invoke() },
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+            LazyColumn(
+                contentPadding = PaddingValues(
+                    vertical = 8.dp,
+                    horizontal = 16.dp
+                )
+            ) {
+                items(articles) {
+                    ArticleItem(
+                        article = it,
+                        onClick = onClick
+                    )
+                }
+                if (articles.isNotEmpty()) {
+                    item {
+                        LoadingIndicator { onPaginate.invoke() }
+                    }
                 }
             }
         }

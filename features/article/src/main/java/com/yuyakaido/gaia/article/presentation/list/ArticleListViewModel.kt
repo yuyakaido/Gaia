@@ -16,20 +16,23 @@ class ArticleListViewModel @Inject constructor(
 
     data class State(
         val articles: List<Article> = emptyList(),
-        val isRefreshing: Boolean = false
+        val isRefreshing: Boolean = false,
+        val isError: Boolean = false
     )
 
     private val ids = MutableStateFlow(emptyList<Article.ID>())
     private val articles = ids.flatMapLatest { repository.observeArticles(it) }
     private val isRefreshing = MutableStateFlow(false)
     private val isPaginating = MutableStateFlow(false)
+    private val isError = MutableStateFlow(false)
 
     val state = combine(
-        articles, isRefreshing
-    ) { articles, isRefreshing ->
+        articles, isRefreshing, isError
+    ) { articles, isRefreshing, isError ->
         State(
             articles = articles,
-            isRefreshing = isRefreshing
+            isRefreshing = isRefreshing,
+            isError = isError
         )
     }.stateIn(
         scope = viewModelScope,
@@ -52,12 +55,20 @@ class ArticleListViewModel @Inject constructor(
     private suspend fun paginate(refresh: Boolean = false) {
         if (!isPaginating.value) {
             isPaginating.value = true
+            isError.value = false
             if (refresh) {
                 ids.value = emptyList()
             }
-            val articles = repository.paginate(after = ids.value.lastOrNull()?.forPagination())
-            ids.value = ids.value.plus(articles.map { it.id })
-            isPaginating.value = false
+            repository.paginate(after = ids.value.lastOrNull())
+                .onSuccess { articles -> ids.value = ids.value.plus(articles.map { it.id }) }
+                .onSuccess {
+                    isPaginating.value = false
+                    isError.value = false
+                }
+                .onFailure {
+                    isPaginating.value = false
+                    isError.value = true
+                }
         }
     }
 

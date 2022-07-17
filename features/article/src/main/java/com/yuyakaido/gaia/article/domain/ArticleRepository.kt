@@ -1,6 +1,6 @@
 package com.yuyakaido.gaia.article.domain
 
-import com.yuyakaido.gaia.article.infra.ArticleApi
+import com.yuyakaido.gaia.article.infra.ArticleRemoteDataSource
 import com.yuyakaido.gaia.core.domain.Article
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ArticleRepository @Inject constructor(
-    private val api: ArticleApi
+    private val remote: ArticleRemoteDataSource
 ) {
 
     private val articles = MutableStateFlow(emptyMap<Article.ID, Article>())
@@ -24,10 +24,11 @@ class ArticleRepository @Inject constructor(
         return articles.map { ids.mapNotNull { id -> it[id] } }
     }
 
-    suspend fun paginate(after: String?): List<Article> {
-        val result = api.getPopularArticles(after).toArticles()
-        articles.emit(articles.value.plus(result.items.map { it.id to it }))
-        return result.items
+    suspend fun paginate(after: Article.ID?): Result<List<Article>> {
+        return remote.getPopularArticles(after)
+            .onSuccess { items ->
+                articles.value = articles.value.plus(items.map { it.id to it })
+            }
     }
 
 }

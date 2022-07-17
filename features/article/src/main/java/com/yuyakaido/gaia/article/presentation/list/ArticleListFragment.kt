@@ -30,6 +30,7 @@ class ArticleListFragment : Fragment() {
                 ArticleListScreen(
                     articles = state.articles,
                     isRefreshing = state.isRefreshing,
+                    isError = state.isError,
                     onRefresh = { viewModel.onRefresh() },
                     onPaginate = { viewModel.onPaginate() },
                     onClick = {
