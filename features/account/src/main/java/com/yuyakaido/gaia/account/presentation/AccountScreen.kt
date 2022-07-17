@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.account
+package com.yuyakaido.gaia.account.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape

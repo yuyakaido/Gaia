@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.message
+package com.yuyakaido.gaia.message.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

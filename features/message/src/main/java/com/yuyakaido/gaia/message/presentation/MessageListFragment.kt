@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.message
+package com.yuyakaido.gaia.message.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater

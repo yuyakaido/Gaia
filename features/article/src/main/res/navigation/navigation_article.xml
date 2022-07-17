@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/fragment_article_list"
         android:label="@string/article"
-        android:name="com.yuyakaido.gaia.article.list.ArticleListFragment">
+        android:name="com.yuyakaido.gaia.article.presentation.list.ArticleListFragment">
         <action
             android:id="@+id/action_article_detail"
             app:destination="@id/fragment_article_detail"
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/fragment_article_detail"
         android:label="{article_title}"
-        android:name="com.yuyakaido.gaia.article.detail.ArticleDetailFragment">
+        android:name="com.yuyakaido.gaia.article.presentation.detail.ArticleDetailFragment">
         <argument
             android:name="article_id"
             app:argType="string"

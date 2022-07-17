@@ -1,7 +1,7 @@
-package com.yuyakaido.gaia.article
+package com.yuyakaido.gaia.article.domain
 
+import com.yuyakaido.gaia.article.infra.ArticleApi
 import com.yuyakaido.gaia.core.domain.Article
-import com.yuyakaido.gaia.core.infra.ArticleApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map

@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.article.detail
+package com.yuyakaido.gaia.article.presentation.detail
 
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text

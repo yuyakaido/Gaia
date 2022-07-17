@@ -1,34 +1,38 @@
-package com.yuyakaido.gaia.article.detail
+package com.yuyakaido.gaia.account.presentation
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yuyakaido.gaia.article.ArticleRepository
-import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.account.domain.AccountRepository
+import com.yuyakaido.gaia.core.domain.Account
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ArticleDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    repository: ArticleRepository
+class AccountViewModel @Inject constructor(
+    private val accountRepository: AccountRepository
 ) : ViewModel() {
 
     sealed class State {
         object Loading : State()
-        data class Ideal(val article: Article) : State()
+        data class Ideal(val account: Account) : State()
     }
 
-    private val args = ArticleDetailFragmentArgs.fromSavedStateHandle(savedStateHandle)
-    val state = repository.observeArticle(Article.ID(args.articleId))
+    val state = accountRepository.observeMe()
         .map { State.Ideal(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
             initialValue = State.Loading
         )
+
+    init {
+        viewModelScope.launch {
+            accountRepository.refreshMe()
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.article.detail
+package com.yuyakaido.gaia.account.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,9 +11,9 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ArticleDetailFragment : Fragment() {
+class AccountFragment : Fragment() {
 
-    private val viewModel by viewModels<ArticleDetailViewModel>()
+    internal val viewModel by viewModels<AccountViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +23,9 @@ class ArticleDetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             // https://developer.android.com/jetpack/compose/interop/interop-apis
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent { ArticleDetailScreen(viewModel = viewModel) }
+            setContent {
+                AccountScreen(viewModel = viewModel)
+            }
         }
     }
 

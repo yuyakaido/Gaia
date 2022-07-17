@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.article.list
+package com.yuyakaido.gaia.article.presentation.list
 
 import android.net.Uri
 import androidx.compose.foundation.Canvas

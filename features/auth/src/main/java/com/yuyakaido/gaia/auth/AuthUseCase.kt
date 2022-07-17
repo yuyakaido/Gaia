@@ -1,6 +1,6 @@
 package com.yuyakaido.gaia.auth
 
-import com.yuyakaido.gaia.account.AccountRepository
+import com.yuyakaido.gaia.account.domain.AccountRepository
 import com.yuyakaido.gaia.core.domain.SessionRepository
 import javax.inject.Inject
 import javax.inject.Singleton

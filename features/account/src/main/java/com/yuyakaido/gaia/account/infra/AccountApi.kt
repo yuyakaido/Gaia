@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.core.infra
+package com.yuyakaido.gaia.account.infra
 
 import retrofit2.http.GET
 

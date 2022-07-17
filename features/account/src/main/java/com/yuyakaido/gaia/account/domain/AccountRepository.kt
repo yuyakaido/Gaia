@@ -1,7 +1,7 @@
-package com.yuyakaido.gaia.account
+package com.yuyakaido.gaia.account.domain
 
+import com.yuyakaido.gaia.account.infra.AccountApi
 import com.yuyakaido.gaia.core.domain.Account
-import com.yuyakaido.gaia.core.infra.AccountApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull

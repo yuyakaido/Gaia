@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/fragment_message_list"
         android:label="@string/message"
-        android:name="com.yuyakaido.gaia.message.MessageListFragment"
+        android:name="com.yuyakaido.gaia.message.presentation.MessageListFragment"
         />
 
 </navigation>

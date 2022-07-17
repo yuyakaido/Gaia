@@ -1,7 +1,7 @@
-package com.yuyakaido.gaia.message
+package com.yuyakaido.gaia.message.domain
 
 import com.yuyakaido.gaia.core.domain.Message
-import com.yuyakaido.gaia.core.infra.MessageApi
+import com.yuyakaido.gaia.message.infra.MessageApi
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton

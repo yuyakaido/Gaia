@@ -1,9 +1,10 @@
-package com.yuyakaido.gaia.message
+package com.yuyakaido.gaia.message.presentation
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.core.domain.Message
+import com.yuyakaido.gaia.message.domain.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber

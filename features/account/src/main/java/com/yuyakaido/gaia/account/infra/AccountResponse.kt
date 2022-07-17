@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.core.infra
+package com.yuyakaido.gaia.account.infra
 
 import android.net.Uri
 import com.yuyakaido.gaia.core.domain.Account
