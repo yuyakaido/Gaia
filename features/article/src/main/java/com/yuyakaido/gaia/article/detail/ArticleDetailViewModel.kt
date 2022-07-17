@@ -22,8 +22,8 @@ class ArticleDetailViewModel @Inject constructor(
         data class Ideal(val article: Article) : State()
     }
 
-    private val id = requireNotNull(savedStateHandle.get<String>("id"))
-    val state = repository.observeArticle(id)
+    private val args = ArticleDetailFragmentArgs.fromSavedStateHandle(savedStateHandle)
+    val state = repository.observeArticle(args.articleId)
         .map { State.Ideal(it) }
         .stateIn(
             scope = viewModelScope,

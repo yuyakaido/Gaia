@@ -18,7 +18,16 @@
 
     <fragment
         android:id="@+id/fragment_article_detail"
-        android:name="com.yuyakaido.gaia.article.detail.ArticleDetailFragment"
-        />
+        android:label="{article_title}"
+        android:name="com.yuyakaido.gaia.article.detail.ArticleDetailFragment">
+        <argument
+            android:name="article_id"
+            app:argType="string"
+            />
+        <argument
+            android:name="article_title"
+            app:argType="string"
+            />
+    </fragment>
 
 </navigation>

@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.yuyakaido.gaia.article.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,8 +29,10 @@ class ArticleListFragment : Fragment() {
                     viewModel = viewModel,
                     onClick = {
                         findNavController().navigate(
-                            resId = R.id.action_article_detail,
-                            args = bundleOf("id" to it.id)
+                            directions = ArticleListFragmentDirections.actionArticleDetail(
+                                articleId = it.id,
+                                articleTitle = it.title
+                            )
                         )
                     }
                 )
