@@ -5,4 +5,5 @@
     <string name="article">Article</string>
     <string name="message">Message</string>
     <string name="account">Account</string>
+    <string name="add_new_session">Add new session</string>
 </resources>

@@ -5,15 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.yuyakaido.gaia.R
-import com.yuyakaido.gaia.core.domain.SessionRepository
+import com.yuyakaido.gaia.auth.OAuth
 import com.yuyakaido.gaia.databinding.ActivityMainBinding
+import com.yuyakaido.gaia.launcher.LauncherActivity
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -26,9 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
-    @Inject
-    internal lateinit var sessionRepository: SessionRepository
+    private val sessionListView by lazy { ComposeView(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         setupTopAppBar()
         setupNavigationView()
         setupBottomNavigationView()
+        observeState()
     }
 
     private fun requireNavController(): NavController {
@@ -56,14 +59,39 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(requireNavController(), appBarConfiguration)
     }
 
-    // https://developer.android.com/guide/navigation/navigation-ui#add_a_navigation_drawer
     private fun setupNavigationView() {
-        binding.navigationView.setupWithNavController(requireNavController())
+        binding.navigationView.addView(sessionListView)
     }
 
     // https://developer.android.com/guide/navigation/navigation-ui#bottom_navigation
     private fun setupBottomNavigationView() {
         binding.bottomNavigationView.setupWithNavController(requireNavController())
+    }
+
+    private fun observeState() {
+        viewModel.state
+            .onEach { state ->
+                sessionListView.setContent {
+                    SessionList(
+                        sessions = state.sessions,
+                        addNewSession = { viewModel.onAddNewSession() },
+                        activateSession = { viewModel.onActivateSession(it) }
+                    )
+                }
+                state.events.firstOrNull()?.let { event ->
+                    when (event) {
+                        MainViewModel.Event.NavigateToAuth -> {
+                            startActivity(Intent(Intent.ACTION_VIEW, OAuth.uri))
+                        }
+                        MainViewModel.Event.Relaunch -> {
+                            startActivity(LauncherActivity.createIntent(this@MainActivity))
+                        }
+                    }
+                    finish()
+                    viewModel.onConsumeEvent(event)
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
 }
