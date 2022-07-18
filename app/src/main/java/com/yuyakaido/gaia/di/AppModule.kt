@@ -7,7 +7,6 @@ import com.yuyakaido.gaia.app.AppIntentResolver
 import com.yuyakaido.gaia.article.infra.ArticleApi
 import com.yuyakaido.gaia.auth.*
 import com.yuyakaido.gaia.core.domain.Kind
-import com.yuyakaido.gaia.core.domain.SessionRepository
 import com.yuyakaido.gaia.core.infra.*
 import com.yuyakaido.gaia.core.presentation.AppIntentResolverType
 import com.yuyakaido.gaia.message.infra.MessageApi

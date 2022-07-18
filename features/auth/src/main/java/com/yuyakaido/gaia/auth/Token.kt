@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.core.domain
+package com.yuyakaido.gaia.auth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

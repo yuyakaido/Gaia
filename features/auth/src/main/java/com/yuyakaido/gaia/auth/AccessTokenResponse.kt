@@ -1,6 +1,5 @@
 package com.yuyakaido.gaia.auth
 
-import com.yuyakaido.gaia.core.domain.Token
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

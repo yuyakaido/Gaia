@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.core.domain
+package com.yuyakaido.gaia.account.domain
 
 import android.net.Uri
 import java.time.ZonedDateTime

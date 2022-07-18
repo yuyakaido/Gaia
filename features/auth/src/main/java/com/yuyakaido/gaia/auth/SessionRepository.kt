@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.core.domain
+package com.yuyakaido.gaia.auth
 
 import android.app.Application
 import android.content.Context

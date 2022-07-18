@@ -1,6 +1,5 @@
 package com.yuyakaido.gaia.auth
 
-import com.yuyakaido.gaia.core.domain.Token
 import javax.inject.Inject
 import javax.inject.Singleton
 

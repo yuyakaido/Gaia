@@ -1,6 +1,5 @@
 package com.yuyakaido.gaia.auth
 
-import com.yuyakaido.gaia.core.domain.SessionRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request

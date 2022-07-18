@@ -1,7 +1,7 @@
 package com.yuyakaido.gaia.account.infra
 
 import android.net.Uri
-import com.yuyakaido.gaia.core.domain.Account
+import com.yuyakaido.gaia.account.domain.Account
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
