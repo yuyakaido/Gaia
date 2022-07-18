@@ -1,5 +1,6 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.infra
 
+import com.yuyakaido.gaia.auth.BuildConfig
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Response

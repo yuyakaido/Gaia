@@ -2,7 +2,7 @@ package com.yuyakaido.gaia.launcher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yuyakaido.gaia.auth.SessionRepository
+import com.yuyakaido.gaia.auth.domain.SessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

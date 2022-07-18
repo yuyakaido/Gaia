@@ -5,7 +5,12 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.yuyakaido.gaia.account.infra.AccountApi
 import com.yuyakaido.gaia.app.AppIntentResolver
 import com.yuyakaido.gaia.article.infra.ArticleApi
-import com.yuyakaido.gaia.auth.*
+import com.yuyakaido.gaia.auth.domain.AuthRepository
+import com.yuyakaido.gaia.auth.domain.SessionRepository
+import com.yuyakaido.gaia.auth.infra.AuthApi
+import com.yuyakaido.gaia.auth.infra.AuthInterceptor
+import com.yuyakaido.gaia.auth.infra.BasicAuthInterceptor
+import com.yuyakaido.gaia.auth.infra.TokenAuthenticator
 import com.yuyakaido.gaia.core.domain.Kind
 import com.yuyakaido.gaia.core.infra.*
 import com.yuyakaido.gaia.core.presentation.AppIntentResolverType

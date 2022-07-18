@@ -1,8 +1,9 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.yuyakaido.gaia.auth.domain.AuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

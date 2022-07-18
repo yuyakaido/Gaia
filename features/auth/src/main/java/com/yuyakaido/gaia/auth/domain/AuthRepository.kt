@@ -1,5 +1,6 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.domain
 
+import com.yuyakaido.gaia.auth.infra.AuthApi
 import javax.inject.Inject
 import javax.inject.Singleton
 

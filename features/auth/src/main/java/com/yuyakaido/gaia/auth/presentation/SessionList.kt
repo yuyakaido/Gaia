@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yuyakaido.gaia.auth.domain.Session
+import com.yuyakaido.gaia.core.R
 
 @Composable
 fun SessionList(

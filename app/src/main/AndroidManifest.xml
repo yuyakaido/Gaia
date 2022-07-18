@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".auth.AuthActivity"
+            android:name=".auth.presentation.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

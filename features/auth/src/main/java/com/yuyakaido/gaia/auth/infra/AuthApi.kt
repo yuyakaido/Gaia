@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.infra
 
 import retrofit2.http.POST
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.domain
 
 import com.yuyakaido.gaia.account.domain.AccountRepository
 import javax.inject.Inject

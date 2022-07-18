@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.yuyakaido.gaia.R
-import com.yuyakaido.gaia.auth.OAuth
-import com.yuyakaido.gaia.auth.SessionList
+import com.yuyakaido.gaia.auth.domain.OAuth
+import com.yuyakaido.gaia.auth.presentation.SessionList
 import com.yuyakaido.gaia.databinding.ActivityMainBinding
 import com.yuyakaido.gaia.launcher.LauncherActivity
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,5 +1,7 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.infra
 
+import com.yuyakaido.gaia.auth.domain.AuthRepository
+import com.yuyakaido.gaia.auth.domain.SessionRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request

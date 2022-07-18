@@ -1,4 +1,4 @@
-package com.yuyakaido.gaia.auth
+package com.yuyakaido.gaia.auth.presentation
 
 import android.os.Bundle
 import androidx.activity.viewModels
