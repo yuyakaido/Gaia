@@ -6,9 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -31,7 +34,8 @@ fun ArticleListScreen(
     isError: Boolean,
     onRefresh: () -> Unit,
     onPaginate: () -> Unit,
-    onClick: (article: Article) -> Unit
+    onClickArticle: (article: Article) -> Unit,
+    onToggleVote: (article: Article) -> Unit
 ) {
     if (isError) {
         Box(contentAlignment = Alignment.Center) {
@@ -58,7 +62,8 @@ fun ArticleListScreen(
                 items(articles) {
                     ArticleItem(
                         article = it,
-                        onClick = onClick
+                        onClickArticle = onClickArticle,
+                        onToggleVote = onToggleVote
                     )
                 }
                 if (articles.isNotEmpty()) {
@@ -74,21 +79,75 @@ fun ArticleListScreen(
 @Composable
 fun ArticleItem(
     article: Article,
-    onClick: (article: Article) -> Unit
+    onClickArticle: (article: Article) -> Unit,
+    onToggleVote: (article: Article) -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .clickable { onClick.invoke(article) }
-    ) {
-        ThumbnailImage(uri = article.thumbnail)
-        Spacer(modifier = Modifier.size(16.dp))
-        Text(
-            text = article.title,
-            maxLines = 4,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth()
-        )
+    Column {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .clickable { onClickArticle.invoke(article) }
+        ) {
+            ThumbnailImage(uri = article.thumbnail)
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(
+                text = article.title,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.weight(1f)) {
+                TextButton(
+                    onClick = { onToggleVote.invoke(article) },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = Color.Gray
+                    )
+                ) {
+                    Icon(
+                        imageVector = if (article.likes == true) {
+                            Icons.Outlined.Favorite
+                        } else {
+                            Icons.Outlined.FavoriteBorder
+                        },
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(text = article.reactions.toString())
+                }
+            }
+            Row(modifier = Modifier.weight(1f)) {
+                TextButton(
+                    onClick = {},
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = Color.Gray
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.ChatBubbleOutline,
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(text = article.numComments.toString())
+                }
+            }
+            Row(modifier = Modifier.weight(1f)) {
+                TextButton(
+                    onClick = {},
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = Color.Gray
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Share,
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(text = stringResource(id = R.string.share))
+                }
+            }
+        }
     }
 }
 

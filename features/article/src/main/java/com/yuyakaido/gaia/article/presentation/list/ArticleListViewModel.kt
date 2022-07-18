@@ -94,4 +94,8 @@ class ArticleListViewModel @Inject constructor(
         sort.value = newSort
     }
 
+    fun onToggleVote(article: Article) {
+        repository.updateArticle(article.toggleVote())
+    }
+
 }

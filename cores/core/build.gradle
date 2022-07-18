@@ -51,6 +51,7 @@ dependencies {
     api 'androidx.compose.ui:ui:1.1.1'
     api 'androidx.compose.ui:ui-tooling:1.1.1'
     api 'androidx.compose.material:material:1.1.1'
+    api 'androidx.compose.material:material-icons-extended:1.1.1'
     api 'androidx.paging:paging-runtime-ktx:3.1.1'
     api 'androidx.paging:paging-compose:1.0.0-alpha14'
 

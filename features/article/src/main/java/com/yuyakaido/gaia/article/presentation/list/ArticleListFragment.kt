@@ -35,14 +35,15 @@ class ArticleListFragment : Fragment() {
                     isError = state.isError,
                     onRefresh = { viewModel.onRefresh() },
                     onPaginate = { viewModel.onPaginate() },
-                    onClick = {
+                    onClickArticle = {
                         findNavController().navigate(
                             directions = ArticleListFragmentDirections.actionArticleDetail(
                                 articleId = it.id.value,
                                 articleTitle = it.title
                             )
                         )
-                    }
+                    },
+                    onToggleVote = { viewModel.onToggleVote(it) }
                 )
             }
         }

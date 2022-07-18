@@ -31,7 +31,11 @@ data class ListResponse(
                 data class ArticleResponse(
                     @SerialName("id") val id: String,
                     @SerialName("title") val title: String,
-                    @SerialName("thumbnail") val thumbnail: String?
+                    @SerialName("thumbnail") val thumbnail: String?,
+                    @SerialName("likes") val likes: Boolean?,
+                    @SerialName("ups") val ups: Int,
+                    @SerialName("downs") val downs: Int,
+                    @SerialName("num_comments") val numComments: Int
                 ) : Data() {
                     fun toThumbnailUri(): Uri {
                         return if (URLUtil.isNetworkUrl(thumbnail)) {
@@ -59,7 +63,11 @@ data class ListResponse(
                     return Article(
                         id = Article.ID(data.id),
                         title = data.title,
-                        thumbnail = data.toThumbnailUri()
+                        thumbnail = data.toThumbnailUri(),
+                        likes = data.likes,
+                        ups = data.ups,
+                        downs = data.downs,
+                        numComments = data.numComments
                     )
                 }
             }
