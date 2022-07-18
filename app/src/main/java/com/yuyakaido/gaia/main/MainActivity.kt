@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     // https://developer.android.com/guide/navigation/navigation-ui#top_app_bar
     private fun setupTopAppBar() {
+        setSupportActionBar(binding.toolbar)
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
                 R.id.fragment_article_list,

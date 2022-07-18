@@ -7,13 +7,12 @@
     </style>
 
     <!-- https://material.io/components/app-bars-top/android#theming-the-top-app-bar -->
-    <style name="Widget.Gaia.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+    <style name="Widget.Gaia.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ThemeOverlay.Gaia.Toolbar</item>
     </style>
 
     <style name="ThemeOverlay.Gaia.Toolbar" parent="">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
     </style>
 
 </resources>

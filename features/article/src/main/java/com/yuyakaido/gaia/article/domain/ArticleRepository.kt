@@ -24,8 +24,8 @@ class ArticleRepository @Inject constructor(
         return articles.map { ids.mapNotNull { id -> it[id] } }
     }
 
-    suspend fun paginate(after: Article.ID?): Result<List<Article>> {
-        return remote.getPopularArticles(after)
+    suspend fun paginate(sort: ArticleSort, after: Article.ID?): Result<List<Article>> {
+        return remote.getPopularArticles(sort, after)
             .onSuccess { items ->
                 articles.value = articles.value.plus(items.map { it.id to it })
             }

@@ -3,6 +3,7 @@ package com.yuyakaido.gaia.article.presentation.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.article.domain.ArticleRepository
+import com.yuyakaido.gaia.article.domain.ArticleSort
 import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -20,6 +21,7 @@ class ArticleListViewModel @Inject constructor(
         val isError: Boolean = false
     )
 
+    private val sort = MutableStateFlow(ArticleSort.Best)
     private val ids = MutableStateFlow(emptyList<Article.ID>())
     private val articles = ids.flatMapLatest { repository.observeArticles(it) }
     private val isRefreshing = MutableStateFlow(false)
@@ -41,25 +43,29 @@ class ArticleListViewModel @Inject constructor(
     )
 
     init {
-        onRefresh()
+        viewModelScope.launch {
+            sort.collect {
+                refresh(it)
+            }
+        }
     }
 
-    private suspend fun refresh() {
+    private suspend fun refresh(sort: ArticleSort) {
         if (!isRefreshing.value) {
             isRefreshing.value = true
-            paginate(refresh = true)
+            paginate(sort = sort, refresh = true)
             isRefreshing.value = false
         }
     }
 
-    private suspend fun paginate(refresh: Boolean = false) {
+    private suspend fun paginate(sort: ArticleSort, refresh: Boolean = false) {
         if (!isPaginating.value) {
             isPaginating.value = true
             isError.value = false
             if (refresh) {
                 ids.value = emptyList()
             }
-            repository.paginate(after = ids.value.lastOrNull())
+            repository.paginate(sort = sort, after = ids.value.lastOrNull())
                 .onSuccess { articles -> ids.value = ids.value.plus(articles.map { it.id }) }
                 .onSuccess {
                     isPaginating.value = false
@@ -73,11 +79,19 @@ class ArticleListViewModel @Inject constructor(
     }
 
     fun onRefresh() {
-        viewModelScope.launch { refresh() }
+        viewModelScope.launch {
+            refresh(sort = sort.value)
+        }
     }
 
     fun onPaginate() {
-        viewModelScope.launch { paginate() }
+        viewModelScope.launch {
+            paginate(sort = sort.value)
+        }
+    }
+
+    fun onSwitchSort(newSort: ArticleSort) {
+        sort.value = newSort
     }
 
 }

@@ -1,5 +1,6 @@
 package com.yuyakaido.gaia.article.infra
 
+import com.yuyakaido.gaia.article.domain.ArticleSort
 import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.infra.ApiErrorHandler
 import com.yuyakaido.gaia.core.infra.ApiExecutor
@@ -12,9 +13,15 @@ class ArticleRemoteDataSource @Inject constructor(
     private val api: ArticleApi
 ) : ApiExecutor {
 
-    suspend fun getPopularArticles(after: Article.ID?): Result<List<Article>> {
+    suspend fun getPopularArticles(
+        sort: ArticleSort,
+        after: Article.ID?
+    ): Result<List<Article>> {
         return execute {
-            val response = api.getPopularArticles(after = after?.forPagination())
+            val response = api.getArticlesBySort(
+                sort = sort.path,
+                after = after?.forPagination()
+            )
             response.toArticles().items
         }
     }

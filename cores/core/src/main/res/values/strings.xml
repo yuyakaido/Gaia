@@ -8,4 +8,6 @@
     <string name="add_new_session">Add new session</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="retry">Retry</string>
+    <string name="sort_best">Best</string>
+    <string name="sort_new">New</string>
 </resources>
