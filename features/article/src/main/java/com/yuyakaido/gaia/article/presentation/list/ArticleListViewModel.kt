@@ -6,8 +6,11 @@ import com.yuyakaido.gaia.article.domain.ArticleRepository
 import com.yuyakaido.gaia.article.domain.ArticleSort
 import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,9 +19,14 @@ class ArticleListViewModel @Inject constructor(
 ) : ViewModel() {
 
     data class State(
-        val articles: List<Article> = emptyList(),
+        val contents: List<Content> = emptyList(),
         val isRefreshing: Boolean = false,
         val isError: Boolean = false
+    )
+
+    data class Content(
+        val article: Article,
+        val isProcessing: Boolean
     )
 
     private val sort = MutableStateFlow(ArticleSort.Best)
@@ -27,12 +35,18 @@ class ArticleListViewModel @Inject constructor(
     private val isRefreshing = MutableStateFlow(false)
     private val isPaginating = MutableStateFlow(false)
     private val isError = MutableStateFlow(false)
+    private val processingArticle = MutableStateFlow<Article?>(null)
 
     val state = combine(
-        articles, isRefreshing, isError
-    ) { articles, isRefreshing, isError ->
+        articles, isRefreshing, isError, processingArticle
+    ) { articles, isRefreshing, isError, processingArticle ->
         State(
-            articles = articles,
+            contents = articles.map {
+                Content(
+                    article = it,
+                    isProcessing = processingArticle?.id == it.id
+                )
+            },
             isRefreshing = isRefreshing,
             isError = isError
         )
@@ -95,7 +109,14 @@ class ArticleListViewModel @Inject constructor(
     }
 
     fun onToggleVote(article: Article) {
-        repository.updateArticle(article.toggleVote())
+        viewModelScope.launch {
+            processingArticle.value = article
+            withContext(Dispatchers.Default) {
+                delay(500)
+                repository.toggleVote(article)
+            }
+            processingArticle.value = null
+        }
     }
 
 }

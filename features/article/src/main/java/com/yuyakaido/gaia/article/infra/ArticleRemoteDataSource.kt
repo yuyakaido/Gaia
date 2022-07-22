@@ -20,9 +20,23 @@ class ArticleRemoteDataSource @Inject constructor(
         return execute {
             val response = api.getArticlesBySort(
                 sort = sort.path,
-                after = after?.forPagination()
+                after = after?.full()
             )
             response.toArticles().items
+        }
+    }
+
+    suspend fun vote(article: Article): Result<Article> {
+        return execute {
+            api.vote(id = article.id.full(), dir = 1)
+            return@execute article.toVoted()
+        }
+    }
+
+    suspend fun unvote(article: Article): Result<Article> {
+        return execute {
+            api.vote(id = article.id.full(), dir = 0)
+            return@execute article.toUnvoted()
         }
     }
 

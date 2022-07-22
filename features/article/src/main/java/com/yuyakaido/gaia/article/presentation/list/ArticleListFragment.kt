@@ -30,7 +30,7 @@ class ArticleListFragment : Fragment() {
             setContent {
                 val state = viewModel.state.collectAsState().value
                 ArticleListScreen(
-                    articles = state.articles,
+                    contents = state.contents,
                     isRefreshing = state.isRefreshing,
                     isError = state.isError,
                     onRefresh = { viewModel.onRefresh() },

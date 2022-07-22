@@ -1,9 +1,7 @@
 package com.yuyakaido.gaia.article.infra
 
 import com.yuyakaido.gaia.core.infra.ListResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ArticleApi {
 
@@ -12,5 +10,12 @@ interface ArticleApi {
         @Path("sort") sort: String,
         @Query("after") after: String?
     ): ListResponse
+
+    @FormUrlEncoded
+    @POST("api/vote")
+    suspend fun vote(
+        @Field("id") id: String,
+        @Field("dir") dir: Int
+    )
 
 }

@@ -29,7 +29,7 @@ import com.yuyakaido.gaia.core.domain.Article
 
 @Composable
 fun ArticleListScreen(
-    articles: List<Article>,
+    contents: List<ArticleListViewModel.Content>,
     isRefreshing: Boolean,
     isError: Boolean,
     onRefresh: () -> Unit,
@@ -59,14 +59,14 @@ fun ArticleListScreen(
                     horizontal = 16.dp
                 )
             ) {
-                items(articles) {
+                items(contents) {
                     ArticleItem(
-                        article = it,
+                        content = it,
                         onClickArticle = onClickArticle,
                         onToggleVote = onToggleVote
                     )
                 }
-                if (articles.isNotEmpty()) {
+                if (contents.isNotEmpty()) {
                     item {
                         LoadingIndicator { onPaginate.invoke() }
                     }
@@ -78,10 +78,12 @@ fun ArticleListScreen(
 
 @Composable
 fun ArticleItem(
-    article: Article,
+    content: ArticleListViewModel.Content,
     onClickArticle: (article: Article) -> Unit,
     onToggleVote: (article: Article) -> Unit
 ) {
+    val article = content.article
+    val isProcessing = content.isProcessing
     Column {
         Row(
             modifier = Modifier
@@ -105,14 +107,29 @@ fun ArticleItem(
                         contentColor = Color.Gray
                     )
                 ) {
-                    Icon(
-                        imageVector = if (article.likes == true) {
-                            Icons.Outlined.Favorite
-                        } else {
-                            Icons.Outlined.FavoriteBorder
-                        },
-                        contentDescription = null
-                    )
+                    if (isProcessing) {
+                        Box(
+                            modifier = Modifier.size(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .requiredWidthIn(),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                    } else if (article.likes == true) {
+                        Icon(
+                            imageVector = Icons.Outlined.Favorite,
+                            contentDescription = null
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.FavoriteBorder,
+                            contentDescription = null
+                        )
+                    }
                     Spacer(modifier = Modifier.size(8.dp))
                     Text(text = article.reactions.toString())
                 }

@@ -12,18 +12,18 @@ data class Article(
     val numComments: Int
 ) {
     data class ID(val value: String) {
-        fun forPagination(): String {
+        fun full(): String {
             return "${Kind.article}_$value"
         }
     }
 
     val reactions = ups + downs
 
-    fun toggleVote(): Article {
-        return when (likes) {
-            null -> copy(likes = true)
-            false -> copy(likes = true)
-            true -> copy(likes = false)
-        }
+    fun toVoted(): Article {
+        return copy(likes = true, ups = ups.inc())
+    }
+
+    fun toUnvoted(): Article {
+        return copy(likes = null, ups = ups.dec())
     }
 }
