@@ -59,7 +59,7 @@ class ArticleListFragment : Fragment() {
         menuHost.addMenuProvider(
             object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.menu_article, menu)
+                    menuInflater.inflate(R.menu.menu_article_list, menu)
                 }
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                     viewModel.onSwitchSort(ArticleSort.from(menuItem.itemId))

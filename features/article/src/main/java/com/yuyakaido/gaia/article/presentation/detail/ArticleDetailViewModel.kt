@@ -8,13 +8,15 @@ import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ArticleDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    repository: ArticleRepository
+    private val repository: ArticleRepository
 ) : ViewModel() {
 
     sealed class State {
@@ -30,5 +32,21 @@ class ArticleDetailViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(),
             initialValue = State.Loading
         )
+    val article = state.mapNotNull {
+        if (it is State.Ideal) {
+            it.article
+        } else {
+            null
+        }
+    }
+
+    fun onToggleVote() {
+        viewModelScope.launch {
+            val currentState = state.value
+            if (currentState is State.Ideal) {
+                repository.toggleVote(currentState.article)
+            }
+        }
+    }
 
 }
