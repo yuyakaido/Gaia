@@ -84,14 +84,35 @@ fun ArticleItem(
 ) {
     val article = content.article
     val isProcessing = content.isProcessing
-    Column {
+    Column(
+        modifier = Modifier.clickable { onClickArticle.invoke(article) }
+    ) {
         Row(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .clickable { onClickArticle.invoke(article) }
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            Canvas(
+                modifier = Modifier.size(32.dp),
+                onDraw = { drawCircle(Color.LightGray) }
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Column {
+                Text(
+                    text = article.community.display(),
+                    maxLines = 1,
+                    style = MaterialTheme.typography.caption
+                )
+                Text(
+                    text = article.author.display(),
+                    maxLines = 1,
+                    style = MaterialTheme.typography.caption
+                )
+            }
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Row {
             ThumbnailImage(uri = article.thumbnail)
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = article.title,
                 maxLines = 4,

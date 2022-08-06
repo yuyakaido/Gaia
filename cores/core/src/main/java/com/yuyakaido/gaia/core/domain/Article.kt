@@ -6,6 +6,8 @@ data class Article(
     val id: ID,
     val title: String,
     val thumbnail: Uri,
+    val community: Community,
+    val author: Author,
     val likes: Boolean?,
     val ups: Int,
     val downs: Int,
