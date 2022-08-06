@@ -6,7 +6,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,8 +21,7 @@ import java.time.format.FormatStyle
 fun AccountScreen(
     viewModel: AccountViewModel
 ) {
-    val state by viewModel.state.collectAsState()
-    when (val s = state) {
+    when (val s = viewModel.state.collectAsState().value) {
         is AccountViewModel.State.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),

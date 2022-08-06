@@ -9,7 +9,13 @@
     <fragment
         android:id="@+id/fragment_account"
         android:label="@string/account"
-        android:name="com.yuyakaido.gaia.account.presentation.AccountFragment"
-        />
+        android:name="com.yuyakaido.gaia.account.presentation.AccountFragment">
+        <argument
+            android:name="name"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"
+            />
+    </fragment>
 
 </navigation>

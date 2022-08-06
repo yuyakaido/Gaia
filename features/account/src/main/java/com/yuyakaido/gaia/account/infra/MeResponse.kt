@@ -1,7 +1,7 @@
 package com.yuyakaido.gaia.account.infra
 
 import android.net.Uri
-import com.yuyakaido.gaia.account.domain.Account
+import com.yuyakaido.gaia.core.domain.Account
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,7 +11,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @Serializable
-data class AccountResponse(
+data class MeResponse(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("icon_img") val iconImg: String,

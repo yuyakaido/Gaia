@@ -12,12 +12,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.yuyakaido.gaia.article.R
 import com.yuyakaido.gaia.article.domain.ArticleSort
+import com.yuyakaido.gaia.core.presentation.AppNavigatorType
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ArticleListFragment : Fragment() {
 
     private val viewModel by viewModels<ArticleListViewModel>()
+
+    @Inject
+    internal lateinit var  appNavigator: AppNavigatorType
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +46,12 @@ class ArticleListFragment : Fragment() {
                                 articleId = it.id.value,
                                 articleTitle = it.title
                             )
+                        )
+                    },
+                    onClickAuthor = {
+                        appNavigator.navigateToAccount(
+                            navController = findNavController(),
+                            name = it.name
                         )
                     },
                     onToggleVote = { viewModel.onToggleVote(it) }

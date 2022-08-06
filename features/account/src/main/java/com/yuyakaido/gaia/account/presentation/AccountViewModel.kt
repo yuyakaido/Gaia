@@ -1,9 +1,10 @@
 package com.yuyakaido.gaia.account.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yuyakaido.gaia.account.domain.Account
 import com.yuyakaido.gaia.account.domain.AccountRepository
+import com.yuyakaido.gaia.core.domain.Account
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -13,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val accountRepository: AccountRepository
 ) : ViewModel() {
 
@@ -21,7 +23,11 @@ class AccountViewModel @Inject constructor(
         data class Ideal(val account: Account) : State()
     }
 
-    val state = accountRepository.observeMe()
+    private val args = AccountFragmentArgs.fromSavedStateHandle(savedStateHandle)
+    private val account = args.name?.let {
+        accountRepository.observeUser(it)
+    } ?: accountRepository.observeMe()
+    val state = account
         .map { State.Ideal(it) }
         .stateIn(
             scope = viewModelScope,
@@ -31,7 +37,9 @@ class AccountViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            accountRepository.refreshMe()
+            args.name?.let {
+                accountRepository.refreshUser(it)
+            } ?: accountRepository.refreshMe()
         }
     }
 

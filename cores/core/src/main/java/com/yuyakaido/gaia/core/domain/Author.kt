@@ -7,7 +7,4 @@ data class Author(
     fun display(): String {
         return "u/$name"
     }
-    fun full(): String {
-        return "${Kind.account}_$id"
-    }
 }

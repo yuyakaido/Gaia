@@ -4,6 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yuyakaido.gaia.account.infra.AccountApi
 import com.yuyakaido.gaia.app.AppIntentResolver
+import com.yuyakaido.gaia.app.AppNavigator
 import com.yuyakaido.gaia.article.infra.ArticleApi
 import com.yuyakaido.gaia.auth.domain.AuthRepository
 import com.yuyakaido.gaia.auth.domain.SessionRepository
@@ -14,6 +15,7 @@ import com.yuyakaido.gaia.auth.infra.TokenAuthenticator
 import com.yuyakaido.gaia.core.domain.Kind
 import com.yuyakaido.gaia.core.infra.*
 import com.yuyakaido.gaia.core.presentation.AppIntentResolverType
+import com.yuyakaido.gaia.core.presentation.AppNavigatorType
 import com.yuyakaido.gaia.message.infra.MessageApi
 import dagger.Module
 import dagger.Provides
@@ -36,6 +38,12 @@ class AppModule {
     @Provides
     fun provideAppIntentResolverType(): AppIntentResolverType {
         return AppIntentResolver()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppNavigatorType(): AppNavigatorType {
+        return AppNavigator()
     }
 
     @Singleton

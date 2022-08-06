@@ -7,7 +7,4 @@ data class Community(
     fun display(): String {
         return "r/$name"
     }
-    fun full(): String {
-        return "${Kind.community}_$id"
-    }
 }

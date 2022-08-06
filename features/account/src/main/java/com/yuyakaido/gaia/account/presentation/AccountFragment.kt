@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AccountFragment : Fragment() {
 
-    internal val viewModel by viewModels<AccountViewModel>()
+    private val viewModel by viewModels<AccountViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

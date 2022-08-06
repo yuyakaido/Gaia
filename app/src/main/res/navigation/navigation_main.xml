@@ -10,4 +10,15 @@
     <include app:graph="@navigation/navigation_message" />
     <include app:graph="@navigation/navigation_account" />
 
+    <action
+        android:id="@+id/action_account"
+        app:destination="@id/navigation_account">
+        <argument
+            android:name="name"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"
+            />
+    </action>
+
 </navigation>

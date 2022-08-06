@@ -26,6 +26,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.yuyakaido.gaia.core.R
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Author
 
 @Composable
 fun ArticleListScreen(
@@ -35,6 +36,7 @@ fun ArticleListScreen(
     onRefresh: () -> Unit,
     onPaginate: () -> Unit,
     onClickArticle: (article: Article) -> Unit,
+    onClickAuthor: (author: Author) -> Unit,
     onToggleVote: (article: Article) -> Unit
 ) {
     if (isError) {
@@ -52,7 +54,6 @@ fun ArticleListScreen(
             onRefresh = { onRefresh.invoke() },
             modifier = Modifier.fillMaxSize()
         ) {
-
             LazyColumn(
                 contentPadding = PaddingValues(
                     vertical = 8.dp,
@@ -63,6 +64,7 @@ fun ArticleListScreen(
                     ArticleItem(
                         content = it,
                         onClickArticle = onClickArticle,
+                        onClickAuthor = onClickAuthor,
                         onToggleVote = onToggleVote
                     )
                 }
@@ -80,6 +82,7 @@ fun ArticleListScreen(
 fun ArticleItem(
     content: ArticleListViewModel.Content,
     onClickArticle: (article: Article) -> Unit,
+    onClickAuthor: (author: Author) -> Unit,
     onToggleVote: (article: Article) -> Unit
 ) {
     val article = content.article
@@ -104,6 +107,7 @@ fun ArticleItem(
                 )
                 Text(
                     text = article.author.display(),
+                    modifier = Modifier.clickable { onClickAuthor.invoke(article.author) },
                     maxLines = 1,
                     style = MaterialTheme.typography.caption
                 )
