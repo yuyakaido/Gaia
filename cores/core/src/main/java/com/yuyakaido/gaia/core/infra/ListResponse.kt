@@ -66,7 +66,7 @@ data class ListResponse(
                         id = Article.ID(data.id),
                         title = data.title,
                         thumbnail = data.toThumbnailUri(),
-                        community = Community(
+                        community = Community.Summary(
                             id = data.subredditId,
                             name = data.subreddit
                         ),

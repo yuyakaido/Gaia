@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -27,6 +29,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.yuyakaido.gaia.core.R
 import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.domain.Author
+import com.yuyakaido.gaia.core.domain.Community
 
 @Composable
 fun ArticleListScreen(
@@ -94,10 +97,24 @@ fun ArticleItem(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Canvas(
-                modifier = Modifier.size(32.dp),
-                onDraw = { drawCircle(Color.LightGray) }
-            )
+            when (val community = article.community) {
+                is Community.Summary -> {
+                    Canvas(
+                        modifier = Modifier.size(32.dp),
+                        onDraw = { drawCircle(Color.LightGray) }
+                    )
+                }
+                is Community.Detail -> {
+                    AsyncImage(
+                        model = community.icon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
             Spacer(modifier = Modifier.size(8.dp))
             Column {
                 Text(
@@ -215,7 +232,6 @@ fun ThumbnailImage(uri: Uri) {
                 width = width,
                 height = height
             ),
-            alignment = Alignment.Center,
             contentScale = ContentScale.Crop
         )
     }

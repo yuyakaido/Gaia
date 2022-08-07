@@ -1,39 +1,45 @@
 package com.yuyakaido.gaia.article.domain
 
+import com.yuyakaido.gaia.article.infra.ArticleLocalDataSource
 import com.yuyakaido.gaia.article.infra.ArticleRemoteDataSource
 import com.yuyakaido.gaia.core.domain.Article
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ArticleRepository @Inject constructor(
-    private val remote: ArticleRemoteDataSource
+    private val remote: ArticleRemoteDataSource,
+    private val local: ArticleLocalDataSource,
+    private val communityRepository: CommunityRepository
 ) {
 
-    private val articles = MutableStateFlow(emptyMap<Article.ID, Article>())
-
-    private fun emitArticle(newArticle: Article) {
-        emitArticles(listOf(newArticle))
-    }
-
-    private fun emitArticles(newArticles: List<Article>) {
-        articles.update {
-            it.plus(newArticles.map { article -> article.id to article })
-        }
-    }
-
     fun observeArticle(id: Article.ID): Flow<Article> {
-        return articles.mapNotNull { it[id] }
+        return local.observeArticle(id)
+            .map { article ->
+                val community = communityRepository.getCommunity(article.community.name)
+                article.copy(community = community)
+            }
     }
 
     fun observeArticles(ids: List<Article.ID>): Flow<List<Article>> {
-        return articles.map { ids.mapNotNull { id -> it[id] } }
+        return local.observeArticles(ids)
+            .map { articles ->
+                articles.map { article ->
+                    val community = communityRepository.getCommunity(article.community.name)
+                    article.copy(community = community)
+                }
+            }
     }
 
     suspend fun paginate(sort: ArticleSort, after: Article.ID?): Result<List<Article>> {
         return remote.getPopularArticles(sort, after)
-            .onSuccess { emitArticles(it) }
+            .onSuccess { local.emitArticles(it) }
+            .onSuccess { articles ->
+                val names = articles.map { it.community.name }.distinct()
+                communityRepository.refreshCommunities(names)
+            }
     }
 
     suspend fun toggleVote(article: Article): Result<Article> {
@@ -41,7 +47,7 @@ class ArticleRepository @Inject constructor(
             true -> remote.unvote(article)
             false -> remote.vote(article)
             null -> remote.vote(article)
-        }.onSuccess { emitArticle(it) }
+        }.onSuccess { local.emitArticle(it) }
     }
 
 }

@@ -22,7 +22,7 @@ data class MeResponse(
         return Account(
             id = id,
             name = name,
-            icon = Uri.parse(iconImg),
+            icon = Uri.parse(iconImg).buildUpon().clearQuery().build(),
             totalKarma = totalKarma,
             createdAt = ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(createdUtc.longValueExact()),
