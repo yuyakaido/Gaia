@@ -18,7 +18,7 @@ data class MeResponse(
     @SerialName("total_karma") val totalKarma: Int,
     @SerialName("created_utc") @Contextual val createdUtc: BigDecimal
 ) {
-    fun toEntity(): Account {
+    fun toAccount(): Account {
         return Account(
             id = id,
             name = name,

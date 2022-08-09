@@ -12,10 +12,14 @@ class AuthUseCase @Inject constructor(
 ) {
 
     suspend fun authorize(code: String) {
-        val token = authRepository.getAccessToken(code)
-        val session = sessionRepository.createSession(token)
-        val account = accountRepository.refreshMe()
-        sessionRepository.putSession(session.copy(name = account.name))
+        authRepository.getAccessToken(code)
+            .onSuccess { token ->
+                val session = sessionRepository.createSession(token)
+                accountRepository.refreshMe()
+                    .onSuccess { account ->
+                        sessionRepository.putSession(session.copy(name = account.name))
+                    }
+            }
     }
 
 }

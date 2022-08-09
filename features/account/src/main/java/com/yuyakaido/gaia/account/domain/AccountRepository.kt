@@ -1,6 +1,6 @@
 package com.yuyakaido.gaia.account.domain
 
-import com.yuyakaido.gaia.account.infra.AccountApi
+import com.yuyakaido.gaia.account.infra.AccountRemoteDataSource
 import com.yuyakaido.gaia.core.domain.Account
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AccountRepository @Inject constructor(
-    private val api: AccountApi
+    private val remote: AccountRemoteDataSource
 ) {
 
     private val me = MutableStateFlow<Account?>(null)
@@ -25,16 +25,14 @@ class AccountRepository @Inject constructor(
         return users.mapNotNull { it[name] }
     }
 
-    suspend fun refreshMe(): Account {
-        val response = api.getMe().toEntity()
-        me.value = response
-        return response
+    suspend fun refreshMe(): Result<Account> {
+        return remote.getMe()
+            .onSuccess { me.value = it }
     }
 
-    suspend fun refreshUser(name: String): Account {
-        val response = api.getUser(name).toAccount()
-        users.value = users.value.plus(name to response)
-        return response
+    suspend fun refreshUser(name: String): Result<Account> {
+        return remote.getUser(name)
+            .onSuccess { users.value = users.value.plus(it.name to it) }
     }
 
 }

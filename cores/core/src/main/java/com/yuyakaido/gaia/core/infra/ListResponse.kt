@@ -2,7 +2,10 @@ package com.yuyakaido.gaia.core.infra
 
 import android.net.Uri
 import android.webkit.URLUtil
-import com.yuyakaido.gaia.core.domain.*
+import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Author
+import com.yuyakaido.gaia.core.domain.Kind
+import com.yuyakaido.gaia.core.domain.Message
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -30,8 +33,7 @@ data class ListResponse(
                     @SerialName("id") val id: String,
                     @SerialName("title") val title: String,
                     @SerialName("thumbnail") val thumbnail: String?,
-                    @SerialName("subreddit_id") val subredditId: String,
-                    @SerialName("subreddit") val subreddit: String,
+                    @SerialName("sr_detail") val srDetail: ObjectResponse.Data.CommunityResponse,
                     @SerialName("author_fullname") val authorFullname: String,
                     @SerialName("author") val author: String,
                     @SerialName("likes") val likes: Boolean?,
@@ -66,10 +68,7 @@ data class ListResponse(
                         id = Article.ID(data.id),
                         title = data.title,
                         thumbnail = data.toThumbnailUri(),
-                        community = Community.Summary(
-                            id = data.subredditId,
-                            name = data.subreddit
-                        ),
+                        community = data.srDetail.toCommunity(),
                         author = Author(
                             id = data.authorFullname,
                             name = data.author

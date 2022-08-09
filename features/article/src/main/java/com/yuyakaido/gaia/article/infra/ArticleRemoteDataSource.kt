@@ -13,7 +13,7 @@ class ArticleRemoteDataSource @Inject constructor(
     private val api: ArticleApi
 ) : ApiExecutor {
 
-    suspend fun getPopularArticles(
+    suspend fun getArticlesBySort(
         sort: ArticleSort,
         after: Article.ID?
     ): Result<List<Article>> {

@@ -16,15 +16,17 @@ class TokenAuthenticator(
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
             val oldSession = sessionRepository.getActiveSession()
-            oldSession?.token?.refreshToken?.let {
-                val newToken = authRepository.refreshAccessToken(refreshToken = it)
-                val newSession = oldSession.copy(token = newToken)
-                sessionRepository.putSession(newSession)
-                return@runBlocking response
-                    .request
-                    .newBuilder()
-                    .header("Authorization", newSession.bearerToken)
-                    .build()
+            oldSession?.token?.refreshToken?.let { refreshToken ->
+                val newToken = authRepository.refreshAccessToken(refreshToken).getOrNull()
+                newToken?.let { token ->
+                    val newSession = oldSession.copy(token = token)
+                    sessionRepository.putSession(newSession)
+                    return@runBlocking response
+                        .request
+                        .newBuilder()
+                        .header("Authorization", newSession.bearerToken)
+                        .build()
+                }
             }
             return@runBlocking null
         }

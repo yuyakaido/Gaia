@@ -7,7 +7,6 @@ import com.yuyakaido.gaia.core.domain.Message
 import com.yuyakaido.gaia.message.domain.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,11 +27,10 @@ class MessageListViewModel @Inject constructor(
         viewModelScope.launch {
             state.value = State.Loading
             try {
-                val messages = repository.getMessages()
-                state.value = State.Ideal(messages = messages)
+                repository.getMessages()
+                    .onSuccess { state.value = State.Ideal(it) }
             } catch (e: Exception) {
                 state.value = State.Error
-                Timber.e(e)
             }
         }
     }

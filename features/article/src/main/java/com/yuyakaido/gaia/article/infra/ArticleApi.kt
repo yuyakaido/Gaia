@@ -8,7 +8,8 @@ interface ArticleApi {
     @GET("{sort}")
     suspend fun getArticlesBySort(
         @Path("sort") sort: String,
-        @Query("after") after: String?
+        @Query("after") after: String?,
+        @Query("sr_detail") srDetail: Boolean = true
     ): ListResponse
 
     @FormUrlEncoded

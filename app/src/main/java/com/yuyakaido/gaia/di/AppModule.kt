@@ -6,7 +6,6 @@ import com.yuyakaido.gaia.account.infra.AccountApi
 import com.yuyakaido.gaia.app.AppIntentResolver
 import com.yuyakaido.gaia.app.AppNavigator
 import com.yuyakaido.gaia.article.infra.ArticleApi
-import com.yuyakaido.gaia.article.infra.CommunityApi
 import com.yuyakaido.gaia.auth.domain.AuthRepository
 import com.yuyakaido.gaia.auth.domain.SessionRepository
 import com.yuyakaido.gaia.auth.infra.AuthApi
@@ -158,14 +157,6 @@ class AppModule {
         @RetrofitForPrivate retrofit: Retrofit
     ): ArticleApi {
         return retrofit.create(ArticleApi::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCommunityApi(
-        @RetrofitForPrivate retrofit: Retrofit
-    ): CommunityApi {
-        return retrofit.create(CommunityApi::class.java)
     }
 
     @Singleton
