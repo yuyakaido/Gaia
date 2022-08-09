@@ -18,14 +18,18 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class ListResponse(
     @SerialName("data") val data: Data
 ) {
+
     @Serializable
     data class Data(
         @SerialName("children") val children: List<Child>,
         @SerialName("before") val before: String?,
         @SerialName("after") val after: String?
     ) {
+
         @Serializable
         sealed class Child {
+            abstract val data: Data
+
             @Serializable
             sealed class Data {
                 @Serializable
@@ -58,6 +62,7 @@ data class ListResponse(
                     @SerialName("replies") val replies: JsonElement
                 ) : Data()
             }
+
             @Serializable
             @SerialName(Kind.article)
             data class ArticleElement(
@@ -80,6 +85,7 @@ data class ListResponse(
                     )
                 }
             }
+
             @Serializable
             @SerialName(Kind.message)
             data class MessageElement(
@@ -94,9 +100,11 @@ data class ListResponse(
                     )
                 }
             }
-            abstract val data: Data
+
         }
+
     }
+
     fun toArticles(): ListingResult<Article> {
         return ListingResult(
             items = data
@@ -107,6 +115,7 @@ data class ListResponse(
             after = data.after
         )
     }
+
     fun toMessages(json: Json): List<Message> {
         return data
             .children
@@ -121,4 +130,5 @@ data class ListResponse(
                 }
             }
     }
+
 }

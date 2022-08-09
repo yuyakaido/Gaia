@@ -13,14 +13,13 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @Serializable
-data class ObjectResponse(
-    @SerialName("kind") val kind: String,
-    @SerialName("data") val data: Data
-) {
+sealed class ObjectResponse {
+
+    abstract val data: Data
+
     @Serializable
     sealed class Data {
         @Serializable
-        @SerialName(Kind.account)
         data class AccountResponse(
             @SerialName("id") val id: String,
             @SerialName("name") val name: String,
@@ -43,7 +42,6 @@ data class ObjectResponse(
         }
 
         @Serializable
-        @SerialName(Kind.community)
         data class CommunityResponse(
             @SerialName("name") val name: String,
             @SerialName("display_name") val displayName: String,
@@ -69,4 +67,17 @@ data class ObjectResponse(
             }
         }
     }
+
+    @Serializable
+    @SerialName(Kind.account)
+    data class AccountElement(
+        @SerialName("data") override val data: Data.AccountResponse
+    ) : ObjectResponse()
+
+    @Serializable
+    @SerialName(Kind.community)
+    data class CommunityElement(
+        @SerialName("data") override val data: Data.CommunityResponse
+    ) : ObjectResponse()
+
 }
