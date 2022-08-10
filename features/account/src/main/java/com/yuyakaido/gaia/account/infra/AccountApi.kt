@@ -22,4 +22,9 @@ interface AccountApi {
         @Query("sr_detail") srDetail: Boolean = true
     ): ListResponse
 
+    @GET("user/{name}/comments")
+    suspend fun getComments(
+        @Path("name") name: String
+    ): ListResponse
+
 }

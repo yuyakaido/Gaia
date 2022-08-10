@@ -2,6 +2,7 @@ package com.yuyakaido.gaia.account.infra
 
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Comment
 import com.yuyakaido.gaia.core.infra.ApiErrorHandler
 import com.yuyakaido.gaia.core.infra.ApiExecutor
 import com.yuyakaido.gaia.core.infra.ListingResult
@@ -28,6 +29,10 @@ class AccountRemoteDataSource @Inject constructor(
 
     suspend fun getPosts(name: String): Result<ListingResult<Article>> {
         return execute { api.getPosts(name).toArticles() }
+    }
+
+    suspend fun getComments(name: String): Result<ListingResult<Comment>> {
+        return execute { api.getComments(name).toComments() }
     }
 
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Comment
 import com.yuyakaido.gaia.core.presentation.ArticleContent
 import com.yuyakaido.gaia.core.presentation.ArticleItem
 import java.time.format.DateTimeFormatter
@@ -41,7 +42,8 @@ fun AccountScreen(
                 )
                 AccountTabContents(
                     selectedTab = s.selectedTab,
-                    posts = s.posts
+                    posts = s.posts,
+                    comments = s.comments
                 )
             }
         }
@@ -120,14 +122,15 @@ fun AccountTabHeader(
 @Composable
 fun AccountTabContents(
     selectedTab: AccountTab,
-    posts: List<Article>
+    posts: List<Article>,
+    comments: List<Comment>
 ) {
     when (selectedTab) {
         AccountTab.Post -> {
             PostTabContent(posts = posts)
         }
         AccountTab.Comment -> {
-            Text(text = stringResource(id = selectedTab.title))
+            CommentTabContent(comments = comments)
         }
         AccountTab.About -> {
             Text(text = stringResource(id = selectedTab.title))
@@ -155,6 +158,32 @@ fun PostTabContent(
                 onClickAuthor = {},
                 onToggleVote = {}
             )
+        }
+    }
+}
+
+@Composable
+fun CommentTabContent(
+    comments: List<Comment>
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(
+            vertical = 8.dp,
+            horizontal = 16.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(comments) {
+            Column {
+                Text(text = it.post.title)
+                Text(
+                    text = "r/${it.community.name}",
+                    style = MaterialTheme.typography.caption
+                )
+                Text(text = it.body)
+            }
+            Spacer(modifier = Modifier.size(8.dp))
+            Divider()
         }
     }
 }

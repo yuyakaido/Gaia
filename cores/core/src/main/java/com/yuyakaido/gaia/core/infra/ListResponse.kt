@@ -2,10 +2,7 @@ package com.yuyakaido.gaia.core.infra
 
 import android.net.Uri
 import android.webkit.URLUtil
-import com.yuyakaido.gaia.core.domain.Article
-import com.yuyakaido.gaia.core.domain.Author
-import com.yuyakaido.gaia.core.domain.Kind
-import com.yuyakaido.gaia.core.domain.Message
+import com.yuyakaido.gaia.core.domain.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -32,6 +29,14 @@ data class ListResponse(
 
             @Serializable
             sealed class Data {
+                @Serializable
+                data class CommentResponse(
+                    @SerialName("id") val id: String,
+                    @SerialName("body") val body: String,
+                    @SerialName("subreddit") val subreddit: String,
+                    @SerialName("link_title") val linkTitle: String
+                ) : Data()
+
                 @Serializable
                 data class ArticleResponse(
                     @SerialName("id") val id: String,
@@ -61,6 +66,25 @@ data class ListResponse(
                     @SerialName("body") val body: String,
                     @SerialName("replies") val replies: JsonElement
                 ) : Data()
+            }
+
+            @Serializable
+            @SerialName(Kind.comment)
+            data class CommentElement(
+                @SerialName("data") override val data: Data.CommentResponse
+            ) : Child() {
+                fun toComment(): Comment {
+                    return Comment(
+                        id = data.id,
+                        body = data.body,
+                        community = Comment.Community(
+                            name = data.subreddit
+                        ),
+                        post = Comment.Post(
+                            title = data.linkTitle
+                        )
+                    )
+                }
             }
 
             @Serializable
@@ -103,6 +127,17 @@ data class ListResponse(
 
         }
 
+    }
+
+    fun toComments(): ListingResult<Comment> {
+        return ListingResult(
+            items = data
+                .children
+                .filterIsInstance<Data.Child.CommentElement>()
+                .map { it.toComment() },
+            before = data.before,
+            after = data.after
+        )
     }
 
     fun toArticles(): ListingResult<Article> {

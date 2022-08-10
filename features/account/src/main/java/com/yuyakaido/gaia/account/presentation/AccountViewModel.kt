@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.account.domain.AccountRepository
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Comment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +26,8 @@ class AccountViewModel @Inject constructor(
         data class Ideal(
             val account: Account,
             val selectedTab: AccountTab,
-            val posts: List<Article>
+            val posts: List<Article>,
+            val comments: List<Comment>
         ) : State()
     }
 
@@ -35,16 +37,16 @@ class AccountViewModel @Inject constructor(
     } ?: accountRepository.observeMe()
     private val selectedTab = MutableStateFlow(AccountTab.Post)
     private val posts = MutableStateFlow<List<Article>>(emptyList())
+    private val comments = MutableStateFlow<List<Comment>>(emptyList())
 
     val state = combine(
-        account,
-        selectedTab,
-        posts
-    ) { account, selectedTab, posts ->
+        account, selectedTab, posts, comments
+    ) { account, selectedTab, posts, comments ->
         State.Ideal(
             account = account,
             selectedTab = selectedTab,
-            posts = posts
+            posts = posts,
+            comments = comments
         )
     }
         .stateIn(
@@ -56,6 +58,7 @@ class AccountViewModel @Inject constructor(
     init {
         refreshAccount()
         refreshPosts()
+        refreshComments()
     }
 
     private fun refreshAccount() {
@@ -71,6 +74,15 @@ class AccountViewModel @Inject constructor(
             args.name?.let {
                 accountRepository.getPosts(it)
                     .onSuccess { result -> posts.value = result.items }
+            }
+        }
+    }
+
+    private fun refreshComments() {
+        viewModelScope.launch {
+            args.name?.let {
+                accountRepository.getComments(it)
+                    .onSuccess { result -> comments.value = result.items }
             }
         }
     }
