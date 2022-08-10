@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.yuyakaido.gaia.account.R
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.domain.Comment
@@ -42,6 +43,7 @@ fun AccountScreen(
                 )
                 AccountTabContents(
                     selectedTab = s.selectedTab,
+                    account = account,
                     posts = s.posts,
                     comments = s.comments
                 )
@@ -122,6 +124,7 @@ fun AccountTabHeader(
 @Composable
 fun AccountTabContents(
     selectedTab: AccountTab,
+    account: Account,
     posts: List<Article>,
     comments: List<Comment>
 ) {
@@ -133,7 +136,7 @@ fun AccountTabContents(
             CommentTabContent(comments = comments)
         }
         AccountTab.About -> {
-            Text(text = stringResource(id = selectedTab.title))
+            AboutTabContent(account = account)
         }
     }
 }
@@ -184,6 +187,81 @@ fun CommentTabContent(
             }
             Spacer(modifier = Modifier.size(8.dp))
             Divider()
+        }
+    }
+}
+
+@Composable
+fun AboutTabContent(
+    account: Account
+) {
+    Column(
+        modifier = Modifier.padding(24.dp)
+    ) {
+        Row {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = account.postKarma.toString(),
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(id = R.string.account_tab_about_post_karma),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = account.commentKarma.toString(),
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(id = R.string.account_tab_about_comment_karma),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+        Spacer(modifier = Modifier.size(12.dp))
+        Row {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = account.awarderKarma.toString(),
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(id = R.string.account_tab_about_awarder_karma),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = account.awardeeKarma.toString(),
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(id = R.string.account_tab_about_awardee_karma),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }

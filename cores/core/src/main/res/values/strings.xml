@@ -17,4 +17,8 @@
     <string name="account_tab_post">Posts</string>
     <string name="account_tab_comment">Comments</string>
     <string name="account_tab_about">About</string>
+    <string name="account_tab_about_post_karma">Post Karma</string>
+    <string name="account_tab_about_comment_karma">Comment Karma</string>
+    <string name="account_tab_about_awarder_karma">Awarder Karma</string>
+    <string name="account_tab_about_awardee_karma">Awardee Karma</string>
 </resources>

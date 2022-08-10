@@ -15,19 +15,27 @@ data class MeResponse(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("icon_img") val iconImg: String,
+    @SerialName("created_utc") @Contextual val createdUtc: BigDecimal,
     @SerialName("total_karma") val totalKarma: Int,
-    @SerialName("created_utc") @Contextual val createdUtc: BigDecimal
+    @SerialName("link_karma") val linkKarma: Int,
+    @SerialName("comment_karma") val commentKarma: Int,
+    @SerialName("awarder_karma") val awarderKarma: Int,
+    @SerialName("awardee_karma") val awardeeKarma: Int
 ) {
     fun toAccount(): Account {
         return Account(
             id = id,
             name = name,
             icon = Uri.parse(iconImg).buildUpon().clearQuery().build(),
-            totalKarma = totalKarma,
             createdAt = ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(createdUtc.longValueExact()),
                 ZoneId.systemDefault()
-            )
+            ),
+            totalKarma = totalKarma,
+            postKarma = linkKarma,
+            commentKarma = commentKarma,
+            awarderKarma = awarderKarma,
+            awardeeKarma = awardeeKarma
         )
     }
 }
