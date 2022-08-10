@@ -12,4 +12,9 @@
     <string name="sort_new">New</string>
     <string name="share">Share</string>
     <string name="vote">Vote</string>
+
+    <!-- Account -->
+    <string name="account_tab_post">Posts</string>
+    <string name="account_tab_comment">Comments</string>
+    <string name="account_tab_about">About</string>
 </resources>
