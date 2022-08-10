@@ -13,6 +13,9 @@ android {
         minSdk 24
         targetSdk 31
     }
+    buildFeatures {
+        compose true
+    }
     compileOptions {
         // https://developer.android.com/studio/write/java8-support#library-desugaring
         coreLibraryDesugaringEnabled true
@@ -21,6 +24,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 

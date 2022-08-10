@@ -2,6 +2,8 @@ package com.yuyakaido.gaia.account.domain
 
 import com.yuyakaido.gaia.account.infra.AccountRemoteDataSource
 import com.yuyakaido.gaia.core.domain.Account
+import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.infra.ListingResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -33,6 +35,10 @@ class AccountRepository @Inject constructor(
     suspend fun refreshUser(name: String): Result<Account> {
         return remote.getUser(name)
             .onSuccess { users.value = users.value.plus(it.name to it) }
+    }
+
+    suspend fun getPosts(name: String): Result<ListingResult<Article>> {
+        return remote.getPosts(name)
     }
 
 }

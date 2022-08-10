@@ -1,8 +1,10 @@
 package com.yuyakaido.gaia.account.infra
 
 import com.yuyakaido.gaia.core.domain.Account
+import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.infra.ApiErrorHandler
 import com.yuyakaido.gaia.core.infra.ApiExecutor
+import com.yuyakaido.gaia.core.infra.ListingResult
 import com.yuyakaido.gaia.core.infra.ObjectResponse
 import javax.inject.Inject
 
@@ -22,6 +24,10 @@ class AccountRemoteDataSource @Inject constructor(
                 is ObjectResponse.Data.CommunityResponse -> throw RuntimeException()
             }
         }
+    }
+
+    suspend fun getPosts(name: String): Result<ListingResult<Article>> {
+        return execute { api.getPosts(name).toArticles() }
     }
 
 }

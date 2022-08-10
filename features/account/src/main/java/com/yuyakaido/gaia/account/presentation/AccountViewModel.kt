@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.account.domain.AccountRepository
 import com.yuyakaido.gaia.core.domain.Account
+import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +24,8 @@ class AccountViewModel @Inject constructor(
         object Loading : State()
         data class Ideal(
             val account: Account,
-            val selectedTab: AccountTab
+            val selectedTab: AccountTab,
+            val posts: List<Article>
         ) : State()
     }
 
@@ -32,12 +34,17 @@ class AccountViewModel @Inject constructor(
         accountRepository.observeUser(it)
     } ?: accountRepository.observeMe()
     private val selectedTab = MutableStateFlow(AccountTab.Post)
+    private val posts = MutableStateFlow<List<Article>>(emptyList())
+
     val state = combine(
-        account, selectedTab
-    ) { account, selectedTab ->
+        account,
+        selectedTab,
+        posts
+    ) { account, selectedTab, posts ->
         State.Ideal(
             account = account,
-            selectedTab = selectedTab
+            selectedTab = selectedTab,
+            posts = posts
         )
     }
         .stateIn(
@@ -47,10 +54,24 @@ class AccountViewModel @Inject constructor(
         )
 
     init {
+        refreshAccount()
+        refreshPosts()
+    }
+
+    private fun refreshAccount() {
         viewModelScope.launch {
             args.name?.let {
                 accountRepository.refreshUser(it)
             } ?: accountRepository.refreshMe()
+        }
+    }
+
+    private fun refreshPosts() {
+        viewModelScope.launch {
+            args.name?.let {
+                accountRepository.getPosts(it)
+                    .onSuccess { result -> posts.value = result.items }
+            }
         }
     }
 

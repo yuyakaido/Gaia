@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.article.domain.ArticleRepository
 import com.yuyakaido.gaia.article.domain.ArticleSort
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.presentation.ArticleContent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,14 +20,9 @@ class ArticleListViewModel @Inject constructor(
 ) : ViewModel() {
 
     data class State(
-        val contents: List<Content> = emptyList(),
+        val contents: List<ArticleContent> = emptyList(),
         val isRefreshing: Boolean = false,
         val isError: Boolean = false
-    )
-
-    data class Content(
-        val article: Article,
-        val isProcessing: Boolean
     )
 
     private val sort = MutableStateFlow(ArticleSort.Best)
@@ -42,7 +38,7 @@ class ArticleListViewModel @Inject constructor(
     ) { articles, isRefreshing, isError, processingArticle ->
         State(
             contents = articles.map {
-                Content(
+                ArticleContent(
                     article = it,
                     isProcessing = processingArticle?.id == it.id
                 )
