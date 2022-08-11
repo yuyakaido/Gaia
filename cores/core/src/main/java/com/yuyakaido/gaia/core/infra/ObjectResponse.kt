@@ -4,6 +4,7 @@ import android.net.Uri
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Community
 import com.yuyakaido.gaia.core.domain.Kind
+import com.yuyakaido.gaia.core.extension.toUriWithoutQuery
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -35,7 +36,7 @@ sealed class ObjectResponse {
                 return Account(
                     id = id,
                     name = name,
-                    icon = Uri.parse(iconImg),
+                    icon = iconImg.toUriWithoutQuery(),
                     createdAt = ZonedDateTime.ofInstant(
                         Instant.ofEpochSecond(createdUtc.longValueExact()),
                         ZoneId.systemDefault()
@@ -62,10 +63,10 @@ sealed class ObjectResponse {
                     name = displayName,
                     icon = when {
                         iconImg?.isNotEmpty() == true -> {
-                            Uri.parse(iconImg)
+                            iconImg.toUriWithoutQuery()
                         }
                         communityIcon?.isNotEmpty() == true -> {
-                            Uri.parse(communityIcon).buildUpon().clearQuery().build()
+                            communityIcon.toUriWithoutQuery()
                         }
                         else -> {
                             Uri.EMPTY

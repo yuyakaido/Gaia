@@ -3,6 +3,7 @@ package com.yuyakaido.gaia.core.infra
 import android.net.Uri
 import android.webkit.URLUtil
 import com.yuyakaido.gaia.core.domain.*
+import com.yuyakaido.gaia.core.extension.toUriWithoutQuery
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -49,15 +50,8 @@ data class ListResponse(
                     @SerialName("ups") val ups: Int,
                     @SerialName("downs") val downs: Int,
                     @SerialName("num_comments") val numComments: Int
-                ) : Data() {
-                    fun toThumbnailUri(): Uri {
-                        return if (URLUtil.isNetworkUrl(thumbnail)) {
-                            Uri.parse(thumbnail)
-                        } else {
-                            Uri.EMPTY
-                        }
-                    }
-                }
+                ) : Data()
+
                 @Serializable
                 data class MessageResponse(
                     @SerialName("id") val id: String,
@@ -96,7 +90,7 @@ data class ListResponse(
                     return Article(
                         id = Article.ID(data.id),
                         title = data.title,
-                        thumbnail = data.toThumbnailUri(),
+                        thumbnail = data.thumbnail.toUriWithoutQuery(),
                         community = data.srDetail.toCommunity(),
                         author = Author(
                             id = data.authorFullname,

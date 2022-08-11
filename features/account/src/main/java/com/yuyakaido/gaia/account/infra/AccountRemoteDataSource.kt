@@ -20,9 +20,9 @@ class AccountRemoteDataSource @Inject constructor(
 
     suspend fun getUser(name: String): Result<Account> {
         return execute {
-            when (val data = api.getUser(name).data) {
-                is ObjectResponse.Data.AccountResponse -> data.toAccount()
-                is ObjectResponse.Data.CommunityResponse -> throw RuntimeException()
+            when (val response = api.getUser(name)) {
+                is ObjectResponse.AccountElement -> response.data.toAccount()
+                is ObjectResponse.CommunityElement -> throw RuntimeException()
             }
         }
     }

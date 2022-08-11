@@ -1,7 +1,8 @@
 package com.yuyakaido.gaia.account.infra
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.yuyakaido.gaia.core.domain.Account
+import com.yuyakaido.gaia.core.extension.toUriWithoutQuery
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -26,7 +27,7 @@ data class MeResponse(
         return Account(
             id = id,
             name = name,
-            icon = Uri.parse(iconImg).buildUpon().clearQuery().build(),
+            icon = iconImg.toUriWithoutQuery(),
             createdAt = ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(createdUtc.longValueExact()),
                 ZoneId.systemDefault()
