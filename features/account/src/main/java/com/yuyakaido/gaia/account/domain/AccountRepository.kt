@@ -4,6 +4,7 @@ import com.yuyakaido.gaia.account.infra.AccountRemoteDataSource
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.domain.Comment
+import com.yuyakaido.gaia.core.domain.Trophy
 import com.yuyakaido.gaia.core.infra.ListingResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,10 @@ class AccountRepository @Inject constructor(
 
     suspend fun getComments(name: String): Result<ListingResult<Comment>> {
         return remote.getComments(name)
+    }
+
+    suspend fun getTrophies(name: String): Result<List<Trophy>> {
+        return remote.getTrophies(name)
     }
 
 }

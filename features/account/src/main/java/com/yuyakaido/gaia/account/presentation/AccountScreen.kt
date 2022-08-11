@@ -20,6 +20,7 @@ import com.yuyakaido.gaia.account.R
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.domain.Comment
+import com.yuyakaido.gaia.core.domain.Trophy
 import com.yuyakaido.gaia.core.presentation.ArticleContent
 import com.yuyakaido.gaia.core.presentation.ArticleItem
 import java.time.format.DateTimeFormatter
@@ -45,7 +46,8 @@ fun AccountScreen(
                     selectedTab = s.selectedTab,
                     account = account,
                     posts = s.posts,
-                    comments = s.comments
+                    comments = s.comments,
+                    trophies = s.trophies
                 )
             }
         }
@@ -126,7 +128,8 @@ fun AccountTabContents(
     selectedTab: AccountTab,
     account: Account,
     posts: List<Article>,
-    comments: List<Comment>
+    comments: List<Comment>,
+    trophies: List<Trophy>
 ) {
     when (selectedTab) {
         AccountTab.Post -> {
@@ -136,7 +139,10 @@ fun AccountTabContents(
             CommentTabContent(comments = comments)
         }
         AccountTab.About -> {
-            AboutTabContent(account = account)
+            AboutTabContent(
+                account = account,
+                trophies = trophies
+            )
         }
     }
 }
@@ -193,75 +199,93 @@ fun CommentTabContent(
 
 @Composable
 fun AboutTabContent(
-    account: Account
+    account: Account,
+    trophies: List<Trophy>
 ) {
-    Column(
-        modifier = Modifier.padding(24.dp)
+    LazyColumn(
+        contentPadding = PaddingValues(20.dp)
     ) {
-        Row {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Text(
-                    text = account.postKarma.toString(),
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(id = R.string.account_tab_about_post_karma),
-                    modifier = Modifier.fillMaxWidth()
-                )
+        item {
+            Row {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = account.postKarma.toString(),
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = stringResource(id = R.string.account_tab_about_post_karma),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = account.commentKarma.toString(),
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = stringResource(id = R.string.account_tab_about_comment_karma),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Text(
-                    text = account.commentKarma.toString(),
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(id = R.string.account_tab_about_comment_karma),
-                    modifier = Modifier.fillMaxWidth()
-                )
+            Spacer(modifier = Modifier.size(12.dp))
+            Row {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = account.awarderKarma.toString(),
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = stringResource(id = R.string.account_tab_about_awarder_karma),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = account.awardeeKarma.toString(),
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = stringResource(id = R.string.account_tab_about_awardee_karma),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
+            Spacer(modifier = Modifier.size(20.dp))
         }
-        Spacer(modifier = Modifier.size(12.dp))
-        Row {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+        items(trophies) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = account.awarderKarma.toString(),
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold
+                AsyncImage(
+                    model = it.icon,
+                    contentDescription = it.name,
+                    modifier = Modifier.size(48.dp)
                 )
-                Text(
-                    text = stringResource(id = R.string.account_tab_about_awarder_karma),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Spacer(modifier = Modifier.size(12.dp))
+                Text(text = it.name)
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Text(
-                    text = account.awardeeKarma.toString(),
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(id = R.string.account_tab_about_awardee_karma),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            Spacer(modifier = Modifier.size(12.dp))
         }
     }
 }

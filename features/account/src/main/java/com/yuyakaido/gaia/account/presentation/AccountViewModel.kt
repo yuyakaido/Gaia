@@ -7,6 +7,7 @@ import com.yuyakaido.gaia.account.domain.AccountRepository
 import com.yuyakaido.gaia.core.domain.Account
 import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.domain.Comment
+import com.yuyakaido.gaia.core.domain.Trophy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,7 +28,8 @@ class AccountViewModel @Inject constructor(
             val account: Account,
             val selectedTab: AccountTab,
             val posts: List<Article>,
-            val comments: List<Comment>
+            val comments: List<Comment>,
+            val trophies: List<Trophy>
         ) : State()
     }
 
@@ -38,15 +40,17 @@ class AccountViewModel @Inject constructor(
     private val selectedTab = MutableStateFlow(AccountTab.Post)
     private val posts = MutableStateFlow<List<Article>>(emptyList())
     private val comments = MutableStateFlow<List<Comment>>(emptyList())
+    private val trophies = MutableStateFlow<List<Trophy>>(emptyList())
 
     val state = combine(
-        account, selectedTab, posts, comments
-    ) { account, selectedTab, posts, comments ->
+        account, selectedTab, posts, comments, trophies
+    ) { account, selectedTab, posts, comments, trophies ->
         State.Ideal(
             account = account,
             selectedTab = selectedTab,
             posts = posts,
-            comments = comments
+            comments = comments,
+            trophies = trophies
         )
     }
         .stateIn(
@@ -59,6 +63,7 @@ class AccountViewModel @Inject constructor(
         refreshAccount()
         refreshPosts()
         refreshComments()
+        refreshTrophies()
     }
 
     private fun refreshAccount() {
@@ -83,6 +88,15 @@ class AccountViewModel @Inject constructor(
             args.name?.let {
                 accountRepository.getComments(it)
                     .onSuccess { result -> comments.value = result.items }
+            }
+        }
+    }
+
+    private fun refreshTrophies() {
+        viewModelScope.launch {
+            args.name?.let {
+                accountRepository.getTrophies(it)
+                    .onSuccess { result -> trophies.value = result }
             }
         }
     }

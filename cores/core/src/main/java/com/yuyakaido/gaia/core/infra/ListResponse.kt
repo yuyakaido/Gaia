@@ -1,7 +1,5 @@
 package com.yuyakaido.gaia.core.infra
 
-import android.net.Uri
-import android.webkit.URLUtil
 import com.yuyakaido.gaia.core.domain.*
 import com.yuyakaido.gaia.core.extension.toUriWithoutQuery
 import kotlinx.serialization.SerialName
@@ -19,9 +17,10 @@ data class ListResponse(
 
     @Serializable
     data class Data(
-        @SerialName("children") val children: List<Child>,
-        @SerialName("before") val before: String?,
-        @SerialName("after") val after: String?
+        @SerialName("children") val children: List<Child>? = emptyList(),
+        @SerialName("trophies") val trophies: List<Child>? = emptyList(),
+        @SerialName("before") val before: String? = null,
+        @SerialName("after") val after: String? = null
     ) {
 
         @Serializable
@@ -59,6 +58,12 @@ data class ListResponse(
                     @SerialName("subject") val subject: String,
                     @SerialName("body") val body: String,
                     @SerialName("replies") val replies: JsonElement
+                ) : Data()
+
+                @Serializable
+                data class AwardResponse(
+                    @SerialName("name") val name: String,
+                    @SerialName("icon_70") val icon70: String
                 ) : Data()
             }
 
@@ -119,16 +124,29 @@ data class ListResponse(
                 }
             }
 
+            @Serializable
+            @SerialName(Kind.award)
+            data class AwardElement(
+                @SerialName("data") override val data: Data.AwardResponse
+            ) : Child() {
+                fun toTrophy(): Trophy {
+                    return Trophy(
+                        name = data.name,
+                        icon = data.icon70.toUriWithoutQuery()
+                    )
+                }
+            }
+
         }
 
     }
 
     fun toComments(): ListingResult<Comment> {
         return ListingResult(
-            items = data
-                .children
-                .filterIsInstance<Data.Child.CommentElement>()
-                .map { it.toComment() },
+            items = data.children
+                ?.filterIsInstance<Data.Child.CommentElement>()
+                ?.map { it.toComment() }
+                ?: emptyList(),
             before = data.before,
             after = data.after
         )
@@ -136,20 +154,19 @@ data class ListResponse(
 
     fun toArticles(): ListingResult<Article> {
         return ListingResult(
-            items = data
-                .children
-                .filterIsInstance<Data.Child.ArticleElement>()
-                .map { it.toArticle() },
+            items = data.children
+                ?.filterIsInstance<Data.Child.ArticleElement>()
+                ?.map { it.toArticle() }
+                ?: emptyList(),
             before = data.before,
             after = data.after
         )
     }
 
     fun toMessages(json: Json): List<Message> {
-        return data
-            .children
-            .filterIsInstance<Data.Child.MessageElement>()
-            .map {
+        return data.children
+            ?.filterIsInstance<Data.Child.MessageElement>()
+            ?.map {
                 val replies = it.data.replies
                 if (replies is JsonObject) {
                     val response = json.decodeFromJsonElement<ListResponse>(replies)
@@ -158,6 +175,14 @@ data class ListResponse(
                     it.toMessage()
                 }
             }
+            ?: emptyList()
+    }
+
+    fun toTrophies(): List<Trophy> {
+        return data.trophies
+            ?.filterIsInstance<Data.Child.AwardElement>()
+            ?.map { it.toTrophy() }
+            ?: emptyList()
     }
 
 }

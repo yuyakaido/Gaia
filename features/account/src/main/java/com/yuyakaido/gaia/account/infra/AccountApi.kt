@@ -11,6 +11,11 @@ interface AccountApi {
     @GET("api/v1/me")
     suspend fun getMe(): MeResponse
 
+    @GET("/api/v1/user/{name}/trophies")
+    suspend fun getTrophies(
+        @Path("name") name: String
+    ): ListResponse
+
     @GET("user/{name}/about")
     suspend fun getUser(
         @Path("name") name: String
