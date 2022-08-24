@@ -1,9 +1,11 @@
 package com.yuyakaido.gaia.article.presentation.list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -44,13 +46,15 @@ fun ArticleListScreen(
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
             onRefresh = { onRefresh.invoke() },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colors.background)
         ) {
             LazyColumn(
                 contentPadding = PaddingValues(
-                    vertical = 8.dp,
-                    horizontal = 16.dp
-                )
+                    vertical = 8.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(contents) {
                     ArticleItem(

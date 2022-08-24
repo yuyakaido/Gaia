@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.yuyakaido.gaia.article.R
 import com.yuyakaido.gaia.article.domain.ArticleSort
 import com.yuyakaido.gaia.core.presentation.AppNavigatorType
+import com.yuyakaido.gaia.core.presentation.GaiaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -34,28 +35,30 @@ class ArticleListFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val state = viewModel.state.collectAsState().value
-                ArticleListScreen(
-                    contents = state.contents,
-                    isRefreshing = state.isRefreshing,
-                    isError = state.isError,
-                    onRefresh = { viewModel.onRefresh() },
-                    onPaginate = { viewModel.onPaginate() },
-                    onClickArticle = {
-                        findNavController().navigate(
-                            directions = ArticleListFragmentDirections.actionArticleDetail(
-                                articleId = it.id.value,
-                                articleTitle = it.title
+                GaiaTheme {
+                    ArticleListScreen(
+                        contents = state.contents,
+                        isRefreshing = state.isRefreshing,
+                        isError = state.isError,
+                        onRefresh = { viewModel.onRefresh() },
+                        onPaginate = { viewModel.onPaginate() },
+                        onClickArticle = {
+                            findNavController().navigate(
+                                directions = ArticleListFragmentDirections.actionArticleDetail(
+                                    articleId = it.id.value,
+                                    articleTitle = it.title
+                                )
                             )
-                        )
-                    },
-                    onClickAuthor = {
-                        appNavigator.navigateToAccount(
-                            navController = findNavController(),
-                            name = it.name
-                        )
-                    },
-                    onToggleVote = { viewModel.onToggleVote(it) }
-                )
+                        },
+                        onClickAuthor = {
+                            appNavigator.navigateToAccount(
+                                navController = findNavController(),
+                                name = it.name
+                            )
+                        },
+                        onToggleVote = { viewModel.onToggleVote(it) }
+                    )
+                }
             }
         }
     }
