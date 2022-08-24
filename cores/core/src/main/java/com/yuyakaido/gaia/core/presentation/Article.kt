@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -82,14 +83,26 @@ fun ArticleItem(
         }
         Spacer(modifier = Modifier.size(8.dp))
         Row {
-            ThumbnailImage(uri = article.thumbnail)
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = article.title,
-                maxLines = 4,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = article.title,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 4
+                )
+                val body = article.body
+                if (body != null) {
+                    Text(
+                        text = article.body,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 4
+                    )
+                }
+            }
+            if (article.thumbnail != Uri.EMPTY) {
+                Spacer(modifier = Modifier.size(8.dp))
+                ThumbnailImage(uri = article.thumbnail)
+            }
         }
         Row(modifier = Modifier.fillMaxWidth()) {
             Row(modifier = Modifier.weight(1f)) {

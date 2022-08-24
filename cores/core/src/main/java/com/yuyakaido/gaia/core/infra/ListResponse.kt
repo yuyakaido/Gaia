@@ -41,6 +41,7 @@ data class ListResponse(
                 data class ArticleResponse(
                     @SerialName("id") val id: String,
                     @SerialName("title") val title: String,
+                    @SerialName("selftext") val selftext: String?,
                     @SerialName("thumbnail") val thumbnail: String?,
                     @SerialName("sr_detail") val srDetail: ObjectResponse.Data.CommunityResponse,
                     @SerialName("author_fullname") val authorFullname: String,
@@ -95,6 +96,7 @@ data class ListResponse(
                     return Article(
                         id = Article.ID(data.id),
                         title = data.title,
+                        body = data.selftext,
                         thumbnail = data.thumbnail.toUriWithoutQuery(),
                         community = data.srDetail.toCommunity(),
                         author = Author(
