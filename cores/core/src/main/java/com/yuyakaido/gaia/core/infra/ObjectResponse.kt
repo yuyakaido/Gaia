@@ -58,7 +58,7 @@ sealed class ObjectResponse {
             @SerialName("community_icon") val communityIcon: String?
         ) : Data() {
             fun toCommunity(): Community {
-                return Community.Detail(
+                return Community(
                     id = name.split("_").last(),
                     name = displayName,
                     icon = when {

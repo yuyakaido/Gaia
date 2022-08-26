@@ -163,6 +163,7 @@ fun PostTabContent(
                     article = it,
                     isProcessing = false
                 ),
+                showDetail = false,
                 onClickArticle = {},
                 onClickAuthor = {},
                 onToggleVote = {}

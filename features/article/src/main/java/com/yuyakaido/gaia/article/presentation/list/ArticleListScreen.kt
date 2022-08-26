@@ -59,6 +59,7 @@ fun ArticleListScreen(
                 items(contents) {
                     ArticleItem(
                         content = it,
+                        showDetail = false,
                         onClickArticle = onClickArticle,
                         onClickAuthor = onClickAuthor,
                         onToggleVote = onToggleVote
