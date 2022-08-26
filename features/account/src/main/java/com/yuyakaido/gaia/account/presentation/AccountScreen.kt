@@ -1,5 +1,6 @@
 package com.yuyakaido.gaia.account.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -110,7 +111,7 @@ fun AccountTabHeader(
     TabRow(
         selectedTabIndex = selectedTab.ordinal,
         modifier = Modifier.height(48.dp),
-        backgroundColor = MaterialTheme.colors.background
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         AccountTab.values().forEach {
             Tab(
@@ -152,10 +153,13 @@ fun PostTabContent(
     posts: List<Article>
 ) {
     LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colors.background),
         contentPadding = PaddingValues(
-            vertical = 8.dp,
-            horizontal = 16.dp
-        )
+            vertical = 8.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(posts) {
             ArticleItem(
