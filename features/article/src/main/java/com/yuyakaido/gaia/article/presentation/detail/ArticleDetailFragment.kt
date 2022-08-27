@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.yuyakaido.gaia.article.R
+import com.yuyakaido.gaia.core.presentation.GaiaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,7 +28,11 @@ class ArticleDetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             // https://developer.android.com/jetpack/compose/interop/interop-apis
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent { ArticleDetailScreen(viewModel = viewModel) }
+            setContent {
+                GaiaTheme {
+                    ArticleDetailScreen(viewModel = viewModel)
+                }
+            }
         }
     }
 

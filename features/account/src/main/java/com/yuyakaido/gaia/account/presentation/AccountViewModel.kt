@@ -28,7 +28,7 @@ class AccountViewModel @Inject constructor(
             val account: Account,
             val selectedTab: AccountTab,
             val posts: List<Article>,
-            val comments: List<Comment>,
+            val comments: List<Comment.Account>,
             val trophies: List<Trophy>
         ) : State()
     }
@@ -39,7 +39,7 @@ class AccountViewModel @Inject constructor(
     } ?: accountRepository.observeMe()
     private val selectedTab = MutableStateFlow(AccountTab.Post)
     private val posts = MutableStateFlow<List<Article>>(emptyList())
-    private val comments = MutableStateFlow<List<Comment>>(emptyList())
+    private val comments = MutableStateFlow<List<Comment.Account>>(emptyList())
     private val trophies = MutableStateFlow<List<Trophy>>(emptyList())
 
     val state = combine(

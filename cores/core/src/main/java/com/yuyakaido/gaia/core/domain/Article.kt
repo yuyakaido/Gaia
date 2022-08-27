@@ -12,7 +12,8 @@ data class Article(
     val likes: Boolean?,
     val ups: Int,
     val downs: Int,
-    val numComments: Int
+    val numComments: Int,
+    val comments: List<Comment.Article>
 ) {
     data class ID(val value: String) {
         fun full(): String {

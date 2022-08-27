@@ -3,6 +3,7 @@ package com.yuyakaido.gaia.article.domain
 import com.yuyakaido.gaia.article.infra.ArticleLocalDataSource
 import com.yuyakaido.gaia.article.infra.ArticleRemoteDataSource
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Comment
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,6 +25,17 @@ class ArticleRepository @Inject constructor(
     suspend fun paginate(sort: ArticleSort, after: Article.ID?): Result<List<Article>> {
         return remote.getArticlesBySort(sort, after)
             .onSuccess { local.emitArticles(it) }
+    }
+
+    suspend fun getComments(article: Article): Result<List<Comment.Article>> {
+        return remote.getCommentsOfArticle(article)
+            .onSuccess {
+                local.emitArticle(
+                    article.copy(
+                        comments = it
+                    )
+                )
+            }
     }
 
     suspend fun toggleVote(article: Article): Result<Article> {

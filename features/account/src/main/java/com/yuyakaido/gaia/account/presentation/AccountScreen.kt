@@ -129,7 +129,7 @@ fun AccountTabContents(
     selectedTab: AccountTab,
     account: Account,
     posts: List<Article>,
-    comments: List<Comment>,
+    comments: List<Comment.Account>,
     trophies: List<Trophy>
 ) {
     when (selectedTab) {
@@ -178,7 +178,7 @@ fun PostTabContent(
 
 @Composable
 fun CommentTabContent(
-    comments: List<Comment>
+    comments: List<Comment.Account>
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
@@ -189,9 +189,9 @@ fun CommentTabContent(
     ) {
         items(comments) {
             Column {
-                Text(text = it.post.title)
+                Text(text = it.article)
                 Text(
-                    text = "r/${it.community.name}",
+                    text = "r/${it.community}",
                     style = MaterialTheme.typography.caption
                 )
                 Text(text = it.body)

@@ -1,15 +1,19 @@
 package com.yuyakaido.gaia.core.domain
 
-data class Comment(
-    val id: String,
-    val body: String,
-    val community: Community,
-    val post: Post
-) {
-    data class Community(
-        val name: String
-    )
-    data class Post(
-        val title: String
-    )
+sealed class Comment {
+    abstract val id: String
+    abstract val body: String
+
+    data class Article(
+        override val id: String,
+        override val body: String,
+        val author: Author
+    ) : Comment()
+
+    data class Account(
+        override val id: String,
+        override val body: String,
+        val community: String,
+        val article: String
+    ) : Comment()
 }

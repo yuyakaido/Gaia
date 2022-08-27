@@ -34,7 +34,9 @@ data class ListResponse(
                     @SerialName("id") val id: String,
                     @SerialName("body") val body: String,
                     @SerialName("subreddit") val subreddit: String,
-                    @SerialName("link_title") val linkTitle: String
+                    @SerialName("link_title") val linkTitle: String? = null,
+                    @SerialName("author") val author: String,
+                    @SerialName("author_fullname") val authorFullname: String
                 ) : Data()
 
                 @Serializable
@@ -66,6 +68,9 @@ data class ListResponse(
                     @SerialName("name") val name: String,
                     @SerialName("icon_70") val icon70: String
                 ) : Data()
+
+                @Serializable
+                object MoreResponse : Data()
             }
 
             @Serializable
@@ -73,16 +78,23 @@ data class ListResponse(
             data class CommentElement(
                 @SerialName("data") override val data: Data.CommentResponse
             ) : Child() {
-                fun toComment(): Comment {
-                    return Comment(
+                fun toArticleComment(): Comment.Article {
+                    return Comment.Article(
                         id = data.id,
                         body = data.body,
-                        community = Comment.Community(
-                            name = data.subreddit
-                        ),
-                        post = Comment.Post(
-                            title = data.linkTitle
+                        author = Author(
+                            id = data.authorFullname.split("_").last(),
+                            name = data.author
                         )
+                    )
+                }
+
+                fun toAccountComment(): Comment.Account {
+                    return Comment.Account(
+                        id = data.id,
+                        body = data.body,
+                        community = data.subreddit,
+                        article = data.linkTitle ?: ""
                     )
                 }
             }
@@ -106,7 +118,8 @@ data class ListResponse(
                         likes = data.likes,
                         ups = data.ups,
                         downs = data.downs,
-                        numComments = data.numComments
+                        numComments = data.numComments,
+                        comments = emptyList()
                     )
                 }
             }
@@ -139,15 +152,31 @@ data class ListResponse(
                 }
             }
 
+            @Serializable
+            @SerialName(Kind.more)
+            data class MoreElement(
+                @SerialName("data") override val data: Data.MoreResponse
+            ) : Child()
         }
 
     }
 
-    fun toComments(): ListingResult<Comment> {
+    fun toArticleComments(): ListingResult<Comment.Article> {
         return ListingResult(
             items = data.children
                 ?.filterIsInstance<Data.Child.CommentElement>()
-                ?.map { it.toComment() }
+                ?.map { it.toArticleComment() }
+                ?: emptyList(),
+            before = data.before,
+            after = data.after
+        )
+    }
+
+    fun toAccountComments(): ListingResult<Comment.Account> {
+        return ListingResult(
+            items = data.children
+                ?.filterIsInstance<Data.Child.CommentElement>()
+                ?.map { it.toAccountComment() }
                 ?: emptyList(),
             before = data.before,
             after = data.after

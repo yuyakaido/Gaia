@@ -2,6 +2,7 @@ package com.yuyakaido.gaia.article.infra
 
 import com.yuyakaido.gaia.article.domain.ArticleSort
 import com.yuyakaido.gaia.core.domain.Article
+import com.yuyakaido.gaia.core.domain.Comment
 import com.yuyakaido.gaia.core.infra.ApiErrorHandler
 import com.yuyakaido.gaia.core.infra.ApiExecutor
 import javax.inject.Inject
@@ -23,6 +24,18 @@ class ArticleRemoteDataSource @Inject constructor(
                 after = after?.full()
             )
             response.toArticles().items
+        }
+    }
+
+    suspend fun getCommentsOfArticle(
+        article: Article
+    ): Result<List<Comment.Article>> {
+        return execute {
+            val response = api.getCommentsOfArticle(
+                community = article.community.name,
+                article = article.id.value
+            )
+            response.last().toArticleComments().items
         }
     }
 

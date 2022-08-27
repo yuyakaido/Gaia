@@ -32,8 +32,8 @@ class AccountRemoteDataSource @Inject constructor(
         return execute { api.getPosts(name).toArticles() }
     }
 
-    suspend fun getComments(name: String): Result<ListingResult<Comment>> {
-        return execute { api.getComments(name).toComments() }
+    suspend fun getComments(name: String): Result<ListingResult<Comment.Account>> {
+        return execute { api.getComments(name).toAccountComments() }
     }
 
     suspend fun getTrophies(name: String): Result<List<Trophy>> {

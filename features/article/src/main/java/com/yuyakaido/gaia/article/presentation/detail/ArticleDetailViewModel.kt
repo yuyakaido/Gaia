@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.article.domain.ArticleRepository
 import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +34,20 @@ class ArticleDetailViewModel @Inject constructor(
             it.article
         } else {
             null
+        }
+    }
+
+    init {
+        fetchComments()
+    }
+
+    private fun fetchComments() {
+        viewModelScope.launch {
+            article.filterNotNull()
+                .take(1)
+                .collectLatest {
+                    repository.getComments(it)
+                }
         }
     }
 

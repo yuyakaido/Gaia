@@ -43,7 +43,7 @@ class AccountRepository @Inject constructor(
         return remote.getPosts(name)
     }
 
-    suspend fun getComments(name: String): Result<ListingResult<Comment>> {
+    suspend fun getComments(name: String): Result<ListingResult<Comment.Account>> {
         return remote.getComments(name)
     }
 
