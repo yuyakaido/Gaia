@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.yuyakaido.gaia.article.domain.ArticleRepository
 import com.yuyakaido.gaia.core.domain.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 @HiltViewModel
 class ArticleDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -18,24 +20,30 @@ class ArticleDetailViewModel @Inject constructor(
 
     sealed class State {
         object Loading : State()
-        data class Ideal(val article: Article) : State()
+        data class Ideal(
+            val article: Article,
+            val isProcessing: Boolean
+        ) : State()
     }
 
     private val args = ArticleDetailFragmentArgs.fromSavedStateHandle(savedStateHandle)
-    val state = repository.observeArticle(Article.ID(args.articleId))
-        .map { State.Ideal(it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = State.Loading
+
+    private val article = repository.observeArticle(Article.ID(args.articleId))
+    private val isProcessing = MutableStateFlow(false)
+
+    val state = combine(
+        article,
+        isProcessing
+    ) { article, isProcessing ->
+        State.Ideal(
+            article = article,
+            isProcessing = isProcessing
         )
-    val article = state.mapNotNull {
-        if (it is State.Ideal) {
-            it.article
-        } else {
-            null
-        }
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = State.Loading
+    )
 
     init {
         fetchComments()
@@ -54,8 +62,13 @@ class ArticleDetailViewModel @Inject constructor(
     fun onToggleVote() {
         viewModelScope.launch {
             val currentState = state.value
-            if (currentState is State.Ideal) {
-                repository.toggleVote(currentState.article)
+            if (currentState is State.Ideal && !isProcessing.value) {
+                isProcessing.value = true
+                withContext(Dispatchers.Default) {
+                    delay(500)
+                    repository.toggleVote(currentState.article)
+                }
+                isProcessing.value = false
             }
         }
     }

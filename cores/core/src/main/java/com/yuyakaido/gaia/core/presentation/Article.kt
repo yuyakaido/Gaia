@@ -62,7 +62,8 @@ fun ArticleItem(
             ReactionButtons(
                 article = article,
                 isProcessing = isProcessing,
-                onToggleVote = onToggleVote
+                onToggleVote = onToggleVote,
+                onClickArticle = onClickArticle
             )
         }
     }
@@ -152,7 +153,8 @@ fun ContentAndThumbnail(
 fun ReactionButtons(
     article: Article,
     isProcessing: Boolean,
-    onToggleVote: (article: Article) -> Unit
+    onToggleVote: (article: Article) -> Unit,
+    onClickArticle: (article: Article) -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.weight(1f)) {
@@ -191,7 +193,7 @@ fun ReactionButtons(
         }
         Row(modifier = Modifier.weight(1f)) {
             TextButton(
-                onClick = {},
+                onClick = { onClickArticle.invoke(article) },
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Color.Gray
                 )

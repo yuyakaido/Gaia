@@ -32,12 +32,12 @@ fun ArticleDetailScreen(
                     ArticleItem(
                         content = ArticleContent(
                             article = article,
-                            isProcessing = false
+                            isProcessing = state.isProcessing
                         ),
                         showDetail = true,
                         onClickArticle = {},
                         onClickAuthor = {},
-                        onToggleVote = {}
+                        onToggleVote = { viewModel.onToggleVote() }
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                 }
