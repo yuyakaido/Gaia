@@ -30,4 +30,28 @@ data class Article(
     fun toUnvoted(): Article {
         return copy(likes = null, ups = ups.dec())
     }
+
+    fun flattenedComments(): List<Comment.Article> {
+        fun collectAllReplies(
+            depth: Int,
+            comment: Comment.Article
+        ): List<Comment.Article> {
+            return if (comment.replies.isEmpty()) {
+                listOf(comment.copy(depth = depth))
+            } else {
+                listOf(comment.copy(depth = depth))
+                    .plus(
+                        comment.replies.flatMap {
+                            collectAllReplies(
+                                depth = depth.inc(),
+                                comment = it
+                            )
+                        }
+                    )
+                }
+            }
+        return comments.flatMap {
+            collectAllReplies(depth = it.depth, comment = it)
+        }
+    }
 }

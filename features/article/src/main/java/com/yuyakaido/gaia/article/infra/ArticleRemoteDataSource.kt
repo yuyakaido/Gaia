@@ -5,13 +5,15 @@ import com.yuyakaido.gaia.core.domain.Article
 import com.yuyakaido.gaia.core.domain.Comment
 import com.yuyakaido.gaia.core.infra.ApiErrorHandler
 import com.yuyakaido.gaia.core.infra.ApiExecutor
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ArticleRemoteDataSource @Inject constructor(
     override val apiErrorHandler: ApiErrorHandler,
-    private val api: ArticleApi
+    private val api: ArticleApi,
+    private val json: Json
 ) : ApiExecutor {
 
     suspend fun getArticlesBySort(
@@ -35,7 +37,7 @@ class ArticleRemoteDataSource @Inject constructor(
                 community = article.community.name,
                 article = article.id.value
             )
-            response.last().toArticleComments().items
+            response.last().toArticleComments(json).items
         }
     }
 

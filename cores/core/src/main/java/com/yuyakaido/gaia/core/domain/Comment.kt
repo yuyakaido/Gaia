@@ -7,7 +7,9 @@ sealed class Comment {
     data class Article(
         override val id: String,
         override val body: String,
-        val author: Author
+        val author: Author,
+        val replies: List<Article>,
+        val depth: Int
     ) : Comment()
 
     data class Account(

@@ -36,7 +36,8 @@ data class ListResponse(
                     @SerialName("subreddit") val subreddit: String,
                     @SerialName("link_title") val linkTitle: String? = null,
                     @SerialName("author") val author: String,
-                    @SerialName("author_fullname") val authorFullname: String
+                    @SerialName("author_fullname") val authorFullname: String,
+                    @SerialName("replies") val replies: JsonElement
                 ) : Data()
 
                 @Serializable
@@ -78,14 +79,21 @@ data class ListResponse(
             data class CommentElement(
                 @SerialName("data") override val data: Data.CommentResponse
             ) : Child() {
-                fun toArticleComment(): Comment.Article {
+                fun toArticleComment(json: Json): Comment.Article {
                     return Comment.Article(
                         id = data.id,
                         body = data.body,
                         author = Author(
                             id = data.authorFullname.split("_").last(),
                             name = data.author
-                        )
+                        ),
+                        replies = if (data.replies is JsonObject) {
+                            val response = json.decodeFromJsonElement<ListResponse>(data.replies)
+                            response.toArticleComments(json).items
+                        } else {
+                            emptyList()
+                        },
+                        depth = 0
                     )
                 }
 
@@ -161,11 +169,11 @@ data class ListResponse(
 
     }
 
-    fun toArticleComments(): ListingResult<Comment.Article> {
+    fun toArticleComments(json: Json): ListingResult<Comment.Article> {
         return ListingResult(
             items = data.children
                 ?.filterIsInstance<Data.Child.CommentElement>()
-                ?.map { it.toArticleComment() }
+                ?.map { it.toArticleComment(json) }
                 ?: emptyList(),
             before = data.before,
             after = data.after
