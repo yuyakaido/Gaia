@@ -36,7 +36,7 @@ data class ListResponse(
                     @SerialName("subreddit") val subreddit: String,
                     @SerialName("link_title") val linkTitle: String? = null,
                     @SerialName("author") val author: String,
-                    @SerialName("author_fullname") val authorFullname: String,
+                    @SerialName("author_fullname") val authorFullname: String? = null,
                     @SerialName("replies") val replies: JsonElement
                 ) : Data()
 
@@ -79,12 +79,13 @@ data class ListResponse(
             data class CommentElement(
                 @SerialName("data") override val data: Data.CommentResponse
             ) : Child() {
-                fun toArticleComment(json: Json): Comment.Article {
+                fun toArticleComment(json: Json): Comment.Article? {
+                    val authorFullname = data.authorFullname ?: return null
                     return Comment.Article(
                         id = data.id,
                         body = data.body,
                         author = Author(
-                            id = data.authorFullname.split("_").last(),
+                            id = authorFullname.split("_").last(),
                             name = data.author
                         ),
                         replies = if (data.replies is JsonObject) {
@@ -173,7 +174,7 @@ data class ListResponse(
         return ListingResult(
             items = data.children
                 ?.filterIsInstance<Data.Child.CommentElement>()
-                ?.map { it.toArticleComment(json) }
+                ?.mapNotNull { it.toArticleComment(json) }
                 ?: emptyList(),
             before = data.before,
             after = data.after
