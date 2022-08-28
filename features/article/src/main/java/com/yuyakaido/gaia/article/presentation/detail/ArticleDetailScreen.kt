@@ -37,7 +37,8 @@ fun ArticleDetailScreen(
                         showDetail = true,
                         onClickArticle = {},
                         onClickAuthor = {},
-                        onToggleVote = { viewModel.onToggleVote() }
+                        onToggleVote = { viewModel.onToggleVote() },
+                        onClickShare = {}
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                 }

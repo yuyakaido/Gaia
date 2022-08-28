@@ -13,7 +13,8 @@ data class Article(
     val ups: Int,
     val downs: Int,
     val numComments: Int,
-    val comments: List<Comment.Article>
+    val comments: List<Comment.Article>,
+    val url: Uri
 ) {
     data class ID(val value: String) {
         fun full(): String {

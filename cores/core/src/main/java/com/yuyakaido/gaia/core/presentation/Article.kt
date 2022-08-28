@@ -37,7 +37,8 @@ fun ArticleItem(
     showDetail: Boolean,
     onClickArticle: (article: Article) -> Unit,
     onClickAuthor: (author: Author) -> Unit,
-    onToggleVote: (article: Article) -> Unit
+    onToggleVote: (article: Article) -> Unit,
+    onClickShare: (article: Article) -> Unit
 ) {
     val article = content.article
     val isProcessing = content.isProcessing
@@ -63,7 +64,8 @@ fun ArticleItem(
                 article = article,
                 isProcessing = isProcessing,
                 onToggleVote = onToggleVote,
-                onClickArticle = onClickArticle
+                onClickArticle = onClickArticle,
+                onClickShare = onClickShare
             )
         }
     }
@@ -154,7 +156,8 @@ fun ReactionButtons(
     article: Article,
     isProcessing: Boolean,
     onToggleVote: (article: Article) -> Unit,
-    onClickArticle: (article: Article) -> Unit
+    onClickArticle: (article: Article) -> Unit,
+    onClickShare: (article: Article) -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.weight(1f)) {
@@ -208,7 +211,7 @@ fun ReactionButtons(
         }
         Row(modifier = Modifier.weight(1f)) {
             TextButton(
-                onClick = {},
+                onClick = { onClickShare.invoke(article) },
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Color.Gray
                 )

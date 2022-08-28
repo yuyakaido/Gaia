@@ -1,5 +1,6 @@
 package com.yuyakaido.gaia.core.infra
 
+import android.net.Uri
 import com.yuyakaido.gaia.core.domain.*
 import com.yuyakaido.gaia.core.extension.toUriWithoutQuery
 import kotlinx.serialization.SerialName
@@ -52,7 +53,8 @@ data class ListResponse(
                     @SerialName("likes") val likes: Boolean?,
                     @SerialName("ups") val ups: Int,
                     @SerialName("downs") val downs: Int,
-                    @SerialName("num_comments") val numComments: Int
+                    @SerialName("num_comments") val numComments: Int,
+                    @SerialName("url") val url: String
                 ) : Data()
 
                 @Serializable
@@ -128,7 +130,8 @@ data class ListResponse(
                         ups = data.ups,
                         downs = data.downs,
                         numComments = data.numComments,
-                        comments = emptyList()
+                        comments = emptyList(),
+                        url = Uri.parse(data.url)
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package com.yuyakaido.gaia.article.presentation.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.compose.runtime.collectAsState
@@ -12,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.yuyakaido.gaia.article.R
 import com.yuyakaido.gaia.article.domain.ArticleSort
+import com.yuyakaido.gaia.core.misc.Sharing
 import com.yuyakaido.gaia.core.presentation.AppNavigatorType
 import com.yuyakaido.gaia.core.presentation.GaiaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,7 +58,13 @@ class ArticleListFragment : Fragment() {
                                 name = it.name
                             )
                         },
-                        onToggleVote = { viewModel.onToggleVote(it) }
+                        onToggleVote = { viewModel.onToggleVote(it) },
+                        onClickShare = {
+                            Sharing.share(
+                                article = it,
+                                activity = requireActivity()
+                            )
+                        }
                     )
                 }
             }

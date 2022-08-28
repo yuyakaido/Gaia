@@ -31,7 +31,8 @@ fun ArticleListScreen(
     onPaginate: () -> Unit,
     onClickArticle: (article: Article) -> Unit,
     onClickAuthor: (author: Author) -> Unit,
-    onToggleVote: (article: Article) -> Unit
+    onToggleVote: (article: Article) -> Unit,
+    onClickShare: (article: Article) -> Unit
 ) {
     if (isError) {
         Box(contentAlignment = Alignment.Center) {
@@ -62,7 +63,8 @@ fun ArticleListScreen(
                         showDetail = false,
                         onClickArticle = onClickArticle,
                         onClickAuthor = onClickAuthor,
-                        onToggleVote = onToggleVote
+                        onToggleVote = onToggleVote,
+                        onClickShare = onClickShare
                     )
                 }
                 if (contents.isNotEmpty()) {

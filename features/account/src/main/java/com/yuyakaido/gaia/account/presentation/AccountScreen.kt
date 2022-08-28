@@ -170,7 +170,8 @@ fun PostTabContent(
                 showDetail = false,
                 onClickArticle = {},
                 onClickAuthor = {},
-                onToggleVote = {}
+                onToggleVote = {},
+                onClickShare = {}
             )
         }
     }
