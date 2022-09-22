@@ -71,7 +71,7 @@ dependencies {
     api 'io.coil-kt:coil-compose:2.2.0'
 
     // Widget
-    api 'com.google.accompanist:accompanist-swiperefresh:0.23.1'
+    api 'com.google.accompanist:accompanist-swiperefresh:0.25.1'
     api 'com.google.android.material:material:1.6.1'
 
     // Debugging
